@@ -290,9 +290,10 @@ const firebaseConfig = {
 
 let firebaseReady = false;
 let stateDocRef = null;
+let db = null;
 try{
   firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+  db = firebase.firestore();
   db.settings({ experimentalForceLongPolling: true });
   stateDocRef = db.collection("trend-tagger").doc("state");
   firebaseReady = true;
@@ -321,28 +322,59 @@ let saveTimer = null;
 function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,9); }
 
 const API_KEY_STORAGE = "dfb-trend-tagger-api-key";
+let apiKeyDocRef = null;
 
-function getApiKey(){
+function getApiKeyLocal(){
   return localStorage.getItem(API_KEY_STORAGE) || "";
 }
 
-function initApiKeyField(){
+async function initApiKeyField(){
   const input = document.getElementById("apiKeyInput");
   const status = document.getElementById("keyStatus");
-  const saved = getApiKey();
-  if(saved){
-    input.value = saved;
-    status.textContent = "key saved on this device";
+  const local = getApiKeyLocal();
+  if(local) input.value = local;
+
+  if(stateDocRef){
+    apiKeyDocRef = db.collection("trend-tagger").doc("apikey");
+    try{
+      const snap = await apiKeyDocRef.get();
+      if(snap.exists && snap.data().key){
+        input.value = snap.data().key;
+        localStorage.setItem(API_KEY_STORAGE, snap.data().key);
+        status.textContent = "key synced from cloud \u2713";
+      } else if(local){
+        status.textContent = "key saved on this device";
+      }
+    }catch(e){
+      console.error("key sync load failed", e);
+      if(local) status.textContent = "key saved on this device (cloud sync unavailable)";
+    }
   }
-  document.getElementById("saveKeyBtn").addEventListener("click", ()=>{
+
+  document.getElementById("saveKeyBtn").addEventListener("click", async ()=>{
     const val = input.value.trim();
     if(!val){ status.textContent = "enter a key first"; status.style.color = "var(--red)"; return; }
     localStorage.setItem(API_KEY_STORAGE, val);
-    status.textContent = "key saved on this device \u2713";
+    status.textContent = "saving\u2026";
     status.style.color = "var(--muted)";
+    try{
+      if(apiKeyDocRef){
+        await apiKeyDocRef.set({ key: val, updatedAt: Date.now() });
+        status.textContent = "key saved \u2014 synced to all your devices \u2713";
+      } else {
+        status.textContent = "key saved on this device (cloud sync unavailable)";
+      }
+    }catch(e){
+      console.error(e);
+      status.textContent = "key saved on this device \u2014 cloud sync failed";
+    }
   });
 }
 initApiKeyField();
+
+function getApiKey(){
+  return document.getElementById("apiKeyInput").value.trim() || getApiKeyLocal();
+}
 
 function setSaveIndicator(text, isError){
   const el = document.getElementById("saveIndicator");
