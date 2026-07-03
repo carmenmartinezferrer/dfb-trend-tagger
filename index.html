@@ -444,7 +444,13 @@ function fileToBase64(file){
 }
 
 function buildPrompt(){
-  return `You are a fashion runway tagging assistant. The image is a runway contact sheet that may contain one or more numbered look photos (e.g. 01, 02, 03). For EACH look visible, extract structured tags using ONLY the controlled vocabulary below where indicated. Respond with ONLY a minified JSON array, no markdown, no code fences, no prose before or after — just the array.
+  return `You are a fashion runway tagging assistant. The image shows one or more runway looks. It may be:
+(a) a small contact sheet with visible numbers (e.g. 01, 02, 03), or
+(b) a dense grid of many thumbnail photos with NO visible numbers (e.g. 9, 12, 15+ looks arranged in rows and columns, sometimes on a dark or plain background).
+
+Identify and tag EVERY distinct look/model shown in the image — there is no limit on how many. If numbers are visible, use them. If not, assign lookNumber sequentially in reading order (left to right, top to bottom), zero-padded to two digits starting at 01. Do not skip or merge looks, and do not stop early on a large grid — tag all of them, even if that means many entries in the array.
+
+For EACH look, extract structured tags using ONLY the controlled vocabulary below where indicated. Respond with ONLY a minified JSON array, no markdown, no code fences, no prose before or after — just the array.
 
 Controlled vocabulary:
 - garment.piece: one of ${JSON.stringify(PIECE_TYPES)}
@@ -455,10 +461,10 @@ Controlled vocabulary:
 - accessory.type: one of ${JSON.stringify(ACCESSORY_TYPES)}
 - footwear.type: one of ${JSON.stringify(FOOTWEAR_TYPES)}
 
-JSON shape per look (omit any garment/accessory/footwear that is not visible — never invent items):
+JSON shape per look (omit any garment/accessory/footwear that is not visible — never invent items). Keep colour and details SHORT (a few words max) since many looks may be in one image and space is limited:
 {"lookNumber":"01","garments":[{"piece":"trouser","type":"wide-leg","fit":"straight","fabric":"wool","fabricTreatment":"sheer","colour":"grey","details":"short note"}],"accessories":[{"type":"tie","detail":"short note"}],"footwear":{"type":"sneaker","colour":"grey"},"coordSet":false,"notes":""}
 
-Keep colour and details concise (a few words each). Output the array only.`;
+Output the array only, containing one object per look visible in the image.`;
 }
 
 async function tagImageFile(file, houseId){
@@ -478,7 +484,7 @@ async function tagImageFile(file, houseId){
     },
     body: JSON.stringify({
       model: "claude-sonnet-4-6",
-      max_tokens: 1000,
+      max_tokens: 4096,
       messages: [{
         role: "user",
         content: [
