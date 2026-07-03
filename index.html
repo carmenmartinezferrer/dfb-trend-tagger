@@ -859,19 +859,23 @@ function donutSlicePath(cx,cy,rOuter,rInner,startA,endA){
 }
 
 function donutSvg(data, size, centerLabel){
-  const cx = size/2, cy = size/2, rOuter = size/2 - 4, rInner = rOuter*0.55;
+  const cx = size/2, cy = size/2, rOuter = size/2 - 4, rInner = rOuter*0.72;
   const rLabel = (rOuter + rInner) / 2;
   const centerText = centerLabel ? `
     <text x="${cx}" y="${cy-4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="${size*0.10}" fill="var(--ink)" font-weight="600">${centerLabel.top}</text>
     <text x="${cx}" y="${cy+size*0.09}" text-anchor="middle" font-family="Inter, sans-serif" font-size="${size*0.055}" fill="var(--muted)">${centerLabel.bottom}</text>` : "";
 
+  function fontSizeFor(share){
+    const raw = size * 0.16 * Math.sqrt(share);
+    return Math.max(7, Math.min(size*0.075, raw));
+  }
+
   function labelFor(d, midA){
-    if(d.share < 0.06) return ""; // skip labels on slivers, legend still covers them
     const pt = polarPt(cx,cy,rLabel,midA);
     const pct = Math.round(d.share*100);
-    // pick readable text colour against the wedge fill
+    const fs = fontSizeFor(d.share);
     const dark = ["white","tan","yellow","gold","silver"].includes(d.key) || d.key==="unspecified";
-    return `<text x="${pt.x}" y="${pt.y}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono, monospace" font-size="${size*0.075}" font-weight="600" fill="${dark ? 'var(--ink)' : '#fff'}">${pct}%</text>`;
+    return `<text x="${pt.x}" y="${pt.y}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono, monospace" font-size="${fs}" font-weight="400" fill="${dark ? 'var(--ink)' : '#fff'}">${pct}%</text>`;
   }
 
   if(!data.length){
