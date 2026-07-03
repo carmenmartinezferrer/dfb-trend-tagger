@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Data Fashion Brief — Trend Tagger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141114;
+    --paper:#FAF6F3;
+    --paper-dim:#F1EAE6;
+    --rose:#C98FA0;
+    --rose-deep:#A85F76;
+    --red:#C6362E;
+    --line:#DFD3CD;
+    --muted:#8A7C78;
+    --white:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:40px 28px 100px;}
+
+  /* header */
+  header{margin-bottom:36px;border-bottom:1px solid var(--line);padding-bottom:28px;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose-deep);margin-bottom:10px;}
+  h1{font-family:'Fraunces',serif;font-weight:500;font-size:38px;margin:0 0 8px;letter-spacing:-.01em;}
+  h1 em{font-style:italic;font-weight:500;color:var(--red);}
+  .sub{color:var(--muted);font-size:14.5px;max-width:640px;line-height:1.5;margin-bottom:20px;}
+  .season-row{display:flex;align-items:center;gap:10px;}
+  .season-row label{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+  .season-row input{
+    font-family:'Fraunces',serif;font-size:18px;font-weight:500;
+    border:none;border-bottom:2px solid var(--rose);background:transparent;
+    padding:4px 2px;color:var(--ink);min-width:280px;
+  }
+  .season-row input:focus{outline:none;border-bottom-color:var(--red);}
+
+  /* section titles */
+  .section-title{
+    display:flex;align-items:baseline;gap:10px;margin:44px 0 18px;
+  }
+  .section-title .num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--rose-deep);}
+  .section-title h2{font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:0;}
+  .section-title .line{flex:1;height:1px;background:var(--line);}
+
+  /* add house panel */
+  .panel{background:var(--white);border:1px solid var(--line);border-radius:2px;padding:22px;}
+  .add-house{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+  .field input[type=text]{
+    border:1px solid var(--line);padding:9px 11px;font-size:14px;font-family:'Inter';
+    background:var(--paper-dim);min-width:220px;border-radius:2px;
+  }
+  .field input[type=text]:focus{outline:none;border-color:var(--rose);}
+  .file-btn{
+    position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px;
+    padding:10px 16px;background:var(--ink);color:var(--white);font-size:13px;
+    font-family:'Inter';font-weight:500;border-radius:2px;cursor:pointer;border:none;
+  }
+  .file-btn input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+  .file-btn:hover{background:#2a2226;}
+  .file-count{font-size:12.5px;color:var(--muted);}
+  .btn{
+    padding:10px 18px;background:var(--red);color:var(--white);border:none;font-size:13px;
+    font-weight:600;font-family:'Inter';border-radius:2px;cursor:pointer;letter-spacing:.01em;
+  }
+  .btn:hover{background:#a82c25;}
+  .btn:disabled{background:#cfc4c1;cursor:not-allowed;}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);}
+  .btn-ghost:hover{background:var(--paper-dim);}
+  .btn-sm{padding:6px 12px;font-size:12px;}
+
+  .status-line{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--rose-deep);margin-top:14px;min-height:16px;}
+
+  /* house groups */
+  .house-group{margin-bottom:26px;border:1px solid var(--line);background:var(--white);}
+  .house-head{
+    display:flex;align-items:center;justify-content:space-between;padding:14px 18px;
+    background:var(--paper-dim);cursor:pointer;
+  }
+  .house-head h3{font-family:'Fraunces',serif;font-size:17px;font-weight:600;margin:0;}
+  .house-head .count{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);}
+  .house-head .toggle{font-size:13px;color:var(--rose-deep);}
+  .house-body{padding:16px 18px;display:none;}
+  .house-body.open{display:block;}
+
+  .look-card{
+    border:1px solid var(--line);border-radius:2px;padding:14px 16px;margin-bottom:12px;
+    background:var(--paper);
+  }
+  .look-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .look-head .tag{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--ink);color:var(--white);padding:2px 8px;border-radius:2px;}
+  .look-head .actions{display:flex;gap:8px;}
+  .icon-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;font-family:'Inter';text-decoration:underline;padding:2px;}
+  .icon-btn:hover{color:var(--red);}
+
+  .garment-row{display:grid;grid-template-columns:100px 1fr 1fr 1fr 1fr 1.3fr 26px;gap:8px;margin-bottom:6px;align-items:center;}
+  .garment-row select, .garment-row input{
+    font-size:12.5px;padding:6px 7px;border:1px solid var(--line);background:var(--white);border-radius:2px;font-family:'Inter';
+  }
+  .row-label{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);}
+  .mini-head{display:grid;grid-template-columns:100px 1fr 1fr 1fr 1fr 1.3fr 26px;gap:8px;margin-bottom:4px;}
+  .mini-head span{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+
+  .sub-block{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
+  .sub-block-title{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--rose-deep);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+  .acc-row{display:grid;grid-template-columns:140px 1fr 26px;gap:8px;margin-bottom:6px;}
+  .acc-row select,.acc-row input{font-size:12.5px;padding:6px 7px;border:1px solid var(--line);background:var(--white);border-radius:2px;}
+  .foot-row{display:grid;grid-template-columns:140px 1fr;gap:8px;}
+  .foot-row select,.foot-row input{font-size:12.5px;padding:6px 7px;border:1px solid var(--line);background:var(--white);border-radius:2px;}
+  .coord-row{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12.5px;}
+  .notes-row{margin-top:8px;}
+  .notes-row textarea{width:100%;font-size:12.5px;padding:7px;border:1px solid var(--line);border-radius:2px;font-family:'Inter';resize:vertical;min-height:32px;}
+  .add-small{font-size:11.5px;color:var(--rose-deep);background:none;border:none;cursor:pointer;text-decoration:underline;padding:2px 0;}
+
+  .empty{color:var(--muted);font-size:13.5px;padding:30px 0;text-align:center;font-family:'JetBrains Mono',monospace;}
+
+  /* report */
+  .tabs{display:flex;gap:6px;margin-bottom:16px;}
+  .tab{padding:8px 16px;font-size:12.5px;font-family:'Inter';font-weight:600;background:var(--paper-dim);border:1px solid var(--line);cursor:pointer;border-radius:2px;color:var(--muted);}
+  .tab.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
+  table{width:100%;border-collapse:collapse;background:var(--white);}
+  th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--line);}
+  td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--paper-dim);}
+  .bar-cell{display:flex;align-items:center;gap:8px;}
+  .bar-track{flex:1;height:6px;background:var(--paper-dim);border-radius:3px;overflow:hidden;min-width:60px;}
+  .bar-fill{height:100%;background:var(--rose);}
+  .bar-fill.hi{background:var(--red);}
+  .pct{font-family:'JetBrains Mono',monospace;font-size:12.5px;min-width:38px;text-align:right;}
+  .cat-badge{font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 6px;background:var(--paper-dim);color:var(--rose-deep);border-radius:2px;text-transform:uppercase;}
+  .house-select-filter{margin-bottom:14px;}
+  .house-select-filter select{padding:7px 10px;font-size:12.5px;border:1px solid var(--line);border-radius:2px;background:var(--white);}
+
+  .export-row{display:flex;gap:10px;margin-top:18px;}
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px;font-family:'JetBrains Mono',monospace;}
+
+  .donut-panel{display:flex;gap:28px;align-items:center;flex-wrap:wrap;background:var(--white);border:1px solid var(--line);padding:20px;margin-bottom:16px;}
+  .donut-panel h4{font-family:'Fraunces',serif;font-size:16px;font-weight:600;margin:0 0 4px;}
+  .donut-meta{font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+  .legend{display:flex;flex-direction:column;gap:6px;min-width:180px;}
+  .legend-row{display:flex;align-items:center;gap:8px;font-size:12.5px;}
+  .swatch{width:12px;height:12px;border-radius:2px;flex-shrink:0;}
+  .legend-name{flex:1;text-transform:capitalize;}
+  .legend-pct{font-family:'JetBrains Mono',monospace;color:var(--muted);}
+  .house-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+  .house-grid .donut-panel{flex-direction:column;align-items:flex-start;margin-bottom:0;}
+  .house-grid .legend{min-width:0;width:100%;}
+
+  @media (max-width: 760px){
+    .wrap{padding:24px 16px 80px;}
+    h1{font-size:28px;}
+    .season-row{flex-wrap:wrap;}
+    .season-row input{min-width:0;flex:1;}
+    .add-house{flex-direction:column;align-items:stretch;}
+    .field input[type=text]{min-width:0;width:100%;}
+    .mini-head{display:none;}
+    .garment-row{
+      grid-template-columns:1fr 1fr;
+      grid-template-areas:
+        "piece piece"
+        "type type"
+        "fit treat"
+        "colour colour"
+        "details details"
+        "remove remove";
+      gap:6px;padding:10px;border:1px solid var(--line);border-radius:2px;margin-bottom:10px;background:var(--white);
+    }
+    .garment-row .g-piece{grid-area:piece;}
+    .garment-row .g-type{grid-area:type;}
+    .garment-row .g-fit{grid-area:fit;}
+    .garment-row .g-treat{grid-area:treat;}
+    .garment-row .g-colour{grid-area:colour;}
+    .garment-row .g-details{grid-area:details;}
+    .garment-row .g-remove{grid-area:remove;justify-self:end;}
+    .acc-row{grid-template-columns:1fr;gap:6px;padding:8px;border:1px solid var(--line);border-radius:2px;margin-bottom:8px;background:var(--white);}
+    .acc-row .a-remove{justify-self:end;}
+    .foot-row{grid-template-columns:1fr;gap:6px;}
+    .house-head h3{font-size:15px;}
+    .house-head{flex-wrap:wrap;gap:8px;}
+    table, thead, tbody, th, td, tr{display:block;}
+    thead{display:none;}
+    tbody tr{border-bottom:1px solid var(--line);padding:10px 0;}
+    td{padding:4px 0;border:none;}
+    td:first-child{font-weight:600;font-family:'Fraunces',serif;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="errorBanner" style="display:none;background:#C6362E;color:#fff;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:16px;border-radius:2px;"></div>
+
+
+  <header>
+    <div class="eyebrow">the data fashion brief — internal tool</div>
+    <h1>Runway <em>Trend</em> Tagger</h1>
+    <div class="sub">Batch-tag looks by house, then read trend share two ways: how much a look owns a single collection, and how much it owns the season.</div>
+    <div class="season-row">
+      <label>SEASON</label>
+      <input type="text" id="seasonInput" placeholder="e.g. Menswear SS27" value="">
+      <span id="saveIndicator" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-left:8px;"></span>
+    </div>
+  </header>
+
+  <div class="section-title"><span class="num">01</span><h2>Add a house</h2><div class="line"></div></div>
+  <div class="panel">
+    <div class="add-house">
+      <div class="field">
+        <label>House / Designer</label>
+        <input type="text" id="houseNameInput" placeholder="e.g. Dries Van Noten">
+      </div>
+      <div class="field">
+        <label>Contact sheets</label>
+        <div class="file-btn">
+          <span id="fileBtnLabel">Choose images</span>
+          <input type="file" id="fileInput" accept="image/*" multiple>
+        </div>
+      </div>
+      <button class="btn" id="tagBtn">Tag looks →</button>
+    </div>
+    <div class="status-line" id="statusLine"></div>
+  </div>
+
+  <div class="section-title"><span class="num">02</span><h2>Review &amp; correct</h2><div class="line"></div></div>
+  <div id="housesContainer"></div>
+
+  <div class="section-title"><span class="num">03</span><h2>Trend report</h2><div class="line"></div></div>
+  <div class="tabs">
+    <button class="tab active" data-tab="season">By season</button>
+    <button class="tab" data-tab="house">By house</button>
+  </div>
+  <div id="reportContainer"></div>
+
+  <div class="section-title"><span class="num">04</span><h2>Colour breakdown</h2><div class="line"></div></div>
+  <div class="tabs">
+    <button class="tab active" data-ctab="total">Total (season)</button>
+    <button class="tab" data-ctab="house">By house</button>
+  </div>
+  <div id="colourContainer"></div>
+
+  <div class="export-row">
+    <button class="btn-ghost btn" id="exportCsv">Export CSV</button>
+    <button class="btn-ghost btn" id="exportJson">Export JSON</button>
+    <div class="file-btn btn-ghost btn" style="display:inline-flex;">
+      <span>Import JSON</span>
+      <input type="file" id="importInput" accept="application/json">
+    </div>
+    <button class="btn-ghost btn" id="resetAll" style="margin-left:auto;color:var(--red);border-color:var(--red);">Reset all data</button>
+  </div>
+
+  <footer>DFB Trend Tagger — tags are estimates from vision analysis, reviewed by you before they count.</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-compat.min.js" crossorigin="anonymous"></script>
+<script>
+window.addEventListener("error", function(e){
+  const banner = document.getElementById("errorBanner");
+  if(banner){
+    banner.style.display = "block";
+    const detail = e.message === "Script error." ? "Script error (cross-origin, no detail available) at " + (e.filename||"unknown") : e.message;
+    banner.textContent = "Script error: " + detail + (e.filename ? " [" + e.filename + ":" + e.lineno + "]" : "");
+  }
+});
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBtZ7UFhoTB_movaKWGlcxuE-2TATb5q0w",
+  authDomain: "trends-tagger-3266d.firebaseapp.com",
+  projectId: "trends-tagger-3266d",
+  storageBucket: "trends-tagger-3266d.firebasestorage.app",
+  messagingSenderId: "863105459597",
+  appId: "1:863105459597:web:020c881ebb2abca05a49c4",
+  measurementId: "G-DX6HCLZM40"
+};
+
+let firebaseReady = false;
+let stateDocRef = null;
+try{
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  db.settings({ experimentalForceLongPolling: true });
+  stateDocRef = db.collection("trend-tagger").doc("state");
+  firebaseReady = true;
+}catch(initErr){
+  console.error("Firebase init failed:", initErr);
+  const banner = document.getElementById("errorBanner");
+  if(banner){
+    banner.style.display = "block";
+    banner.textContent = "Firebase failed to initialise: " + initErr.message + " — the Firebase library may not have loaded. Check your connection and reload.";
+  }
+}
+
+// ---------- controlled vocabulary ----------
+const TROUSER_TYPES = ["straight","wide-leg","tapered","skinny","cropped","capri","balloon","cargo","palazzo","bootcut","flare","jogger","pleated-front","other"];
+const FIT_TYPES = ["oversized","fitted","cropped","relaxed","tailored-slim"];
+const FABRIC_TREATMENTS = ["sheer","matte","textured","glossy","opaque"];
+const PIECE_TYPES = ["outerwear","top","trouser","skirt","dress","knitwear"];
+const ACCESSORY_TYPES = ["bag","sunglasses","jewelry","hat","scarf","tie","belt","gloves","other"];
+const FOOTWEAR_TYPES = ["sneaker","loafer","boot","sandal","heel","flat","oxford-derby","slide","other"];
+
+// ---------- state ----------
+let state = { season: "", houses: [], looks: [] };
+let activeTab = "season";
+let saveTimer = null;
+
+function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,9); }
+
+function setSaveIndicator(text, isError){
+  const el = document.getElementById("saveIndicator");
+  if(!el) return;
+  el.textContent = text;
+  el.style.color = isError ? "var(--red)" : "var(--muted)";
+}
+
+async function saveOnce(){
+  if(!stateDocRef) throw new Error("Firebase not initialised — see error banner above.");
+  await stateDocRef.set({ json: JSON.stringify(state), updatedAt: Date.now() });
+}
+
+function scheduleSave(){
+  clearTimeout(saveTimer);
+  setSaveIndicator("saving\u2026", false);
+  saveTimer = setTimeout(async ()=>{
+    try{
+      await saveOnce();
+      setSaveIndicator("saved to cloud \u2713", false);
+    }catch(e){
+      console.error("save failed, retrying once", e);
+      try{
+        await saveOnce();
+        setSaveIndicator("saved to cloud \u2713", false);
+      }catch(e2){
+        console.error("retry failed", e2);
+        setSaveIndicator("not saved \u2014 cloud error, keep working, export as backup", true);
+      }
+    }
+  }, 400);
+}
+
+async function loadState(){
+  if(!stateDocRef){
+    setSaveIndicator("Firebase not initialised \u2014 see error banner above", true);
+    document.getElementById("seasonInput").value = state.season || "";
+    render();
+    return;
+  }
+  try{
+    const snap = await stateDocRef.get();
+    if(snap.exists){
+      const data = snap.data();
+      if(data && data.json){
+        const parsed = JSON.parse(data.json);
+        if(parsed && parsed.houses) state = parsed;
+      }
+    }
+    setSaveIndicator("loaded from cloud \u2713", false);
+  }catch(e){
+    console.error(e);
+    setSaveIndicator("couldn't reach cloud storage \u2014 check connection", true);
+  }
+  document.getElementById("seasonInput").value = state.season || "";
+  render();
+}
+
+// ---------- vision tagging ----------
+function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const r = new FileReader();
+    r.onload = ()=> resolve(r.result.split(",")[1]);
+    r.onerror = ()=> reject(new Error("read failed"));
+    r.readAsDataURL(file);
+  });
+}
+
+function buildPrompt(){
+  return `You are a fashion runway tagging assistant. The image is a runway contact sheet that may contain one or more numbered look photos (e.g. 01, 02, 03). For EACH look visible, extract structured tags using ONLY the controlled vocabulary below where indicated. Respond with ONLY a minified JSON array, no markdown, no code fences, no prose before or after — just the array.
+
+Controlled vocabulary:
+- garment.piece: one of ${JSON.stringify(PIECE_TYPES)}
+- trouser garment.type (only when piece is "trouser"): one of ${JSON.stringify(TROUSER_TYPES)}
+- outerwear/top/skirt/dress/knitwear garment.type: short free-text label (e.g. "double-breasted blazer","dress shirt","trench coat")
+- garment.fit: one of ${JSON.stringify(FIT_TYPES)}
+- garment.fabricTreatment: one of ${JSON.stringify(FABRIC_TREATMENTS)}
+- accessory.type: one of ${JSON.stringify(ACCESSORY_TYPES)}
+- footwear.type: one of ${JSON.stringify(FOOTWEAR_TYPES)}
+
+JSON shape per look (omit any garment/accessory/footwear that is not visible — never invent items):
+{"lookNumber":"01","garments":[{"piece":"trouser","type":"wide-leg","fit":"straight","fabric":"wool","fabricTreatment":"sheer","colour":"grey","details":"short note"}],"accessories":[{"type":"tie","detail":"short note"}],"footwear":{"type":"sneaker","colour":"grey"},"coordSet":false,"notes":""}
+
+Keep colour and details concise (a few words each). Output the array only.`;
+}
+
+async function tagImageFile(file, houseId){
+  const base64 = await fileToBase64(file);
+  const mediaType = file.type || "image/jpeg";
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1000,
+      messages: [{
+        role: "user",
+        content: [
+          { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } },
+          { type: "text", text: buildPrompt() }
+        ]
+      }]
+    })
+  });
+  const data = await response.json();
+  const textBlocks = (data.content || []).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+  let cleaned = textBlocks.trim().replace(/^```json/i,"").replace(/^```/,"").replace(/```$/,"").trim();
+  let arr;
+  try{ arr = JSON.parse(cleaned); }
+  catch(e){
+    console.error("parse failed for", file.name, "raw response:", cleaned);
+    throw new Error("Couldn't parse tags from " + file.name + " — model response wasn't valid JSON.");
+  }
+  if(!Array.isArray(arr)) arr = [arr];
+  if(!arr.length){
+    throw new Error("No looks detected in " + file.name + " — try a clearer image.");
+  }
+  return arr.map(look=>({
+    id: uid("look"),
+    houseId,
+    lookNumber: look.lookNumber || "?",
+    garments: Array.isArray(look.garments) ? look.garments : [],
+    accessories: Array.isArray(look.accessories) ? look.accessories : [],
+    footwear: look.footwear || {},
+    coordSet: !!look.coordSet,
+    notes: look.notes || ""
+  }));
+}
+
+// ---------- UI: add house / tag ----------
+document.getElementById("fileInput").addEventListener("change", (e)=>{
+  const n = e.target.files.length;
+  document.getElementById("fileBtnLabel").textContent = n ? n + " file" + (n>1?"s":"") + " selected" : "Choose images";
+});
+
+document.getElementById("seasonInput").addEventListener("input", (e)=>{
+  state.season = e.target.value;
+  scheduleSave();
+});
+
+document.getElementById("tagBtn").addEventListener("click", async ()=>{
+  const nameInput = document.getElementById("houseNameInput");
+  const fileInput = document.getElementById("fileInput");
+  const statusLine = document.getElementById("statusLine");
+  const houseName = nameInput.value.trim();
+  const files = Array.from(fileInput.files);
+
+  if(!houseName){ statusLine.textContent = "Add a house name first."; return; }
+  if(!files.length){ statusLine.textContent = "Choose at least one contact sheet image."; return; }
+
+  let house = state.houses.find(h=>h.name.toLowerCase()===houseName.toLowerCase());
+  if(!house){ house = { id: uid("house"), name: houseName }; state.houses.push(house); }
+  openHouses.add(house.id);
+
+  const tagBtn = document.getElementById("tagBtn");
+  tagBtn.disabled = true;
+
+  let addedCount = 0;
+  let failCount = 0;
+  let logLines = [];
+
+  function renderLog(){
+    statusLine.innerHTML = logLines.map(l=>`<div>${l}</div>`).join("");
+  }
+
+  for(let i=0;i<files.length;i++){
+    logLines.push(`Tagging image ${i+1} of ${files.length} for ${houseName}\u2026`);
+    renderLog();
+    try{
+      const looks = await tagImageFile(files[i], house.id);
+      state.looks.push(...looks);
+      addedCount += looks.length;
+      logLines[logLines.length-1] = `Image ${i+1}: added ${looks.length} look(s).`;
+      renderLog();
+      render();
+      scheduleSave();
+    }catch(err){
+      console.error(err);
+      failCount++;
+      logLines[logLines.length-1] = `<span style="color:var(--red)">Image ${i+1} failed: ${err.message}</span>`;
+      renderLog();
+    }
+  }
+
+  logLines.push(`<strong>Done. Added ${addedCount} look(s) for ${houseName}${failCount ? ", " + failCount + " image(s) failed" : ""}.</strong>`);
+  renderLog();
+  render();
+  fileInput.value = "";
+  document.getElementById("fileBtnLabel").textContent = "Choose images";
+  nameInput.value = "";
+  tagBtn.disabled = false;
+});
+
+// ---------- render: houses & looks ----------
+const openHouses = new Set();
+
+function optionsHtml(list, selected){
+  return list.map(v=>`<option value="${v}" ${v===selected?"selected":""}>${v}</option>`).join("");
+}
+
+function garmentRowHtml(lookId, gIdx, g){
+  return `
+  <div class="garment-row" data-look="${lookId}" data-gidx="${gIdx}">
+    <select class="g-piece">${optionsHtml(PIECE_TYPES, g.piece||"")}</select>
+    <input class="g-type" type="text" value="${(g.type||"").replace(/"/g,'&quot;')}" placeholder="type">
+    <select class="g-fit">${optionsHtml(FIT_TYPES, g.fit||"")}</select>
+    <select class="g-treat">${optionsHtml(FABRIC_TREATMENTS, g.fabricTreatment||"")}</select>
+    <input class="g-colour" type="text" value="${(g.colour||"").replace(/"/g,'&quot;')}" placeholder="colour">
+    <input class="g-details" type="text" value="${(g.details||"").replace(/"/g,'&quot;')}" placeholder="details">
+    <button class="icon-btn g-remove" title="remove">✕</button>
+  </div>`;
+}
+
+function accRowHtml(lookId, aIdx, a){
+  return `
+  <div class="acc-row" data-look="${lookId}" data-aidx="${aIdx}">
+    <select class="a-type">${optionsHtml(ACCESSORY_TYPES, a.type||"")}</select>
+    <input class="a-detail" type="text" value="${(a.detail||"").replace(/"/g,'&quot;')}" placeholder="detail">
+    <button class="icon-btn a-remove" title="remove">✕</button>
+  </div>`;
+}
+
+function lookCardHtml(look){
+  const garmentsHtml = look.garments.map((g,i)=>garmentRowHtml(look.id,i,g)).join("");
+  const accHtml = look.accessories.map((a,i)=>accRowHtml(look.id,i,a)).join("");
+  return `
+  <div class="look-card" data-look-id="${look.id}">
+    <div class="look-head">
+      <span class="tag">Look ${look.lookNumber}</span>
+      <div class="actions">
+        <button class="icon-btn del-look">delete look</button>
+      </div>
+    </div>
+
+    <div class="mini-head">
+      <span>Piece</span><span>Type</span><span>Fit</span><span>Fabric treat.</span><span>Colour</span><span>Details</span><span></span>
+    </div>
+    <div class="garments-list">${garmentsHtml}</div>
+    <button class="add-small add-garment">+ add garment</button>
+
+    <div class="sub-block">
+      <div class="sub-block-title">Accessories</div>
+      <div class="acc-list">${accHtml}</div>
+      <button class="add-small add-acc">+ add accessory</button>
+    </div>
+
+    <div class="sub-block">
+      <div class="sub-block-title">Footwear</div>
+      <div class="foot-row">
+        <select class="f-type">${optionsHtml(FOOTWEAR_TYPES, look.footwear.type||"")}</select>
+        <input class="f-colour" type="text" value="${(look.footwear.colour||"").replace(/"/g,'&quot;')}" placeholder="colour">
+      </div>
+    </div>
+
+    <div class="coord-row">
+      <input type="checkbox" class="coord-check" ${look.coordSet?"checked":""}>
+      <label>Jacket / trouser co-ord set</label>
+    </div>
+
+    <div class="notes-row">
+      <textarea class="notes-field" placeholder="free notes…">${(look.notes||"")}</textarea>
+    </div>
+  </div>`;
+}
+
+function renderHouses(){
+  const container = document.getElementById("housesContainer");
+  if(!state.houses.length){
+    container.innerHTML = `<div class="empty">No houses tagged yet — add one above to get started.</div>`;
+    return;
+  }
+  container.innerHTML = state.houses.map(house=>{
+    const looks = state.looks.filter(l=>l.houseId===house.id);
+    const isOpen = openHouses.has(house.id);
+    const cards = looks.length
+      ? looks.map(lookCardHtml).join("")
+      : `<div class="empty">No looks yet for this house.</div>`;
+    return `
+    <div class="house-group" data-house-id="${house.id}">
+      <div class="house-head">
+        <h3>${house.name}</h3>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span class="count">${looks.length} look${looks.length===1?"":"s"}</span>
+          <button class="icon-btn del-house">delete house</button>
+          <span class="toggle">${isOpen?"– collapse":"+ expand"}</span>
+        </div>
+      </div>
+      <div class="house-body ${isOpen?"open":""}">${cards}</div>
+    </div>`;
+  }).join("");
+}
+
+// ---------- trend aggregation ----------
+function trendTagsForLook(look){
+  const tags = new Set();
+  (look.garments||[]).forEach(g=>{
+    if(g.piece && g.type) tags.add(`garment | ${g.piece}: ${g.type}`);
+    if(g.fabricTreatment) tags.add(`fabric | ${g.fabricTreatment}`);
+    if(g.fit) tags.add(`fit | ${g.fit}`);
+  });
+  (look.accessories||[]).forEach(a=>{
+    if(a.type) tags.add(`accessory | ${a.type}`);
+  });
+  if(look.footwear && look.footwear.type) tags.add(`footwear | ${look.footwear.type}`);
+  if(look.coordSet) tags.add(`styling | jacket/trouser co-ord`);
+  if(!(look.accessories||[]).some(a=>a.type==="bag")) tags.add(`accessory | no bag`);
+  return Array.from(tags);
+}
+
+function computeSeasonReport(){
+  const totalLooks = state.looks.length;
+  const totalHouses = state.houses.length;
+  const byTag = {}; // tag -> {lookCount, houseIds:Set}
+  state.looks.forEach(look=>{
+    const tags = trendTagsForLook(look);
+    tags.forEach(t=>{
+      if(!byTag[t]) byTag[t] = { lookCount:0, houseIds:new Set() };
+      byTag[t].lookCount++;
+      byTag[t].houseIds.add(look.houseId);
+    });
+  });
+  return Object.entries(byTag).map(([tag,v])=>({
+    tag,
+    lookCount: v.lookCount,
+    lookShare: totalLooks ? v.lookCount/totalLooks : 0,
+    houseCount: v.houseIds.size,
+    houseShare: totalHouses ? v.houseIds.size/totalHouses : 0
+  })).sort((a,b)=>b.lookShare-a.lookShare);
+}
+
+function computeHouseReport(houseId){
+  const looks = state.looks.filter(l=>l.houseId===houseId);
+  const total = looks.length;
+  const byTag = {};
+  looks.forEach(look=>{
+    trendTagsForLook(look).forEach(t=>{
+      byTag[t] = (byTag[t]||0) + 1;
+    });
+  });
+  return Object.entries(byTag).map(([tag,count])=>({
+    tag, count, share: total ? count/total : 0
+  })).sort((a,b)=>b.share-a.share);
+}
+
+function pctBar(pct, hi){
+  const p = Math.round(pct*100);
+  return `<div class="bar-cell"><div class="bar-track"><div class="bar-fill ${hi?'hi':''}" style="width:${p}%"></div></div><span class="pct">${p}%</span></div>`;
+}
+
+function renderReport(){
+  const container = document.getElementById("reportContainer");
+  if(!state.looks.length){
+    container.innerHTML = `<div class="empty">Tag some looks to see the trend report.</div>`;
+    return;
+  }
+  if(activeTab==="season"){
+    const rows = computeSeasonReport();
+    container.innerHTML = `
+    <table>
+      <thead><tr>
+        <th>Trend</th><th>Share of season looks</th><th>Houses featuring it</th>
+      </tr></thead>
+      <tbody>
+        ${rows.map(r=>`
+          <tr>
+            <td>${r.tag}</td>
+            <td>${pctBar(r.lookShare, r.lookShare>=0.5)} <span style="color:var(--muted);font-size:11.5px;">(${r.lookCount}/${state.looks.length} looks)</span></td>
+            <td>${r.houseCount}/${state.houses.length} houses (${Math.round(r.houseShare*100)}%)</td>
+          </tr>`).join("")}
+      </tbody>
+    </table>`;
+  } else {
+    const filterId = document.getElementById("houseFilterSelect") ? document.getElementById("houseFilterSelect").value : (state.houses[0] ? state.houses[0].id : "");
+    const selectHtml = `<div class="house-select-filter"><select id="houseFilterSelect">${state.houses.map(h=>`<option value="${h.id}" ${h.id===filterId?"selected":""}>${h.name}</option>`).join("")}</select></div>`;
+    const rows = filterId ? computeHouseReport(filterId) : [];
+    const total = state.looks.filter(l=>l.houseId===filterId).length;
+    container.innerHTML = selectHtml + `
+    <table>
+      <thead><tr><th>Trend</th><th>Share within collection</th></tr></thead>
+      <tbody>
+        ${rows.map(r=>`
+          <tr>
+            <td>${r.tag}</td>
+            <td>${pctBar(r.share, r.share>=0.5)} <span style="color:var(--muted);font-size:11.5px;">(${r.count}/${total} looks)</span></td>
+          </tr>`).join("")}
+      </tbody>
+    </table>`;
+    document.getElementById("houseFilterSelect").addEventListener("change", renderReport);
+  }
+}
+
+document.querySelectorAll(".tab").forEach(tab=>{
+  tab.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    tab.classList.add("active");
+    activeTab = tab.dataset.tab;
+    renderReport();
+  });
+});
+
+// ---------- colour breakdown ----------
+const COLOUR_PALETTE = [
+  {key:"black",   hex:"#141114", match:["black","noir","jet"]},
+  {key:"white",   hex:"#EFE9E3", match:["white","ivory","ecru","off-white"]},
+  {key:"navy",    hex:"#1B2A4A", match:["navy"]},
+  {key:"blue",    hex:"#3E6FA8", match:["blue","denim","cobalt","indigo"]},
+  {key:"grey",    hex:"#8C8580", match:["grey","gray","charcoal","slate"]},
+  {key:"brown",   hex:"#6B4A34", match:["brown","chocolate","coffee","espresso"]},
+  {key:"tan",     hex:"#C9A876", match:["tan","camel","beige","sand","khaki","nude"]},
+  {key:"olive",   hex:"#6B6B3A", match:["olive","army"]},
+  {key:"green",   hex:"#3F6B4A", match:["green","emerald","forest","sage","mint"]},
+  {key:"red",     hex:"#C6362E", match:["red","crimson","scarlet"]},
+  {key:"burgundy",hex:"#6E2A34", match:["burgundy","maroon","wine","oxblood"]},
+  {key:"pink",    hex:"#D98FA0", match:["pink","rose","blush","fuchsia","magenta"]},
+  {key:"purple",  hex:"#6E4A78", match:["purple","lilac","lavender","violet"]},
+  {key:"yellow",  hex:"#D9B34A", match:["yellow","mustard","lemon"]},
+  {key:"orange",  hex:"#C97A3E", match:["orange","rust","terracotta","copper"]},
+  {key:"silver",  hex:"#B9B4AE", match:["silver","metallic","chrome"]},
+  {key:"gold",    hex:"#B8963E", match:["gold","golden","bronze"]}
+];
+const UNSPECIFIED = {key:"unspecified", hex:"#DFD3CD"};
+
+function normaliseColour(str){
+  if(!str) return [UNSPECIFIED.key];
+  const tokens = str.toLowerCase().split(/[\s\/,\-&]+|\band\b/).map(t=>t.trim()).filter(Boolean);
+  const matched = new Set();
+  tokens.forEach(tok=>{
+    COLOUR_PALETTE.forEach(p=>{
+      if(p.match.some(m=> tok.includes(m) || m.includes(tok))) matched.add(p.key);
+    });
+  });
+  return matched.size ? Array.from(matched) : [UNSPECIFIED.key];
+}
+
+function hexFor(key){
+  const found = COLOUR_PALETTE.find(p=>p.key===key);
+  return found ? found.hex : UNSPECIFIED.hex;
+}
+
+function computeColourBreakdown(houseId){
+  const looks = houseId ? state.looks.filter(l=>l.houseId===houseId) : state.looks;
+  const counts = {};
+  looks.forEach(look=>{
+    (look.garments||[]).forEach(g=>{
+      if(!g.colour) return;
+      const keys = normaliseColour(g.colour);
+      const weight = 1/keys.length;
+      keys.forEach(k=> counts[k] = (counts[k]||0) + weight);
+    });
+  });
+  const total = Object.values(counts).reduce((a,b)=>a+b,0);
+  return Object.entries(counts)
+    .map(([key,value])=>({ key, hex: hexFor(key), value, share: total? value/total : 0 }))
+    .sort((a,b)=>b.value-a.value);
+}
+
+function polarPt(cx,cy,r,angleDeg){
+  const a = (angleDeg-90) * Math.PI/180;
+  return { x: cx + r*Math.cos(a), y: cy + r*Math.sin(a) };
+}
+
+function donutSlicePath(cx,cy,rOuter,rInner,startA,endA){
+  const so = polarPt(cx,cy,rOuter,endA);
+  const eo = polarPt(cx,cy,rOuter,startA);
+  const si = polarPt(cx,cy,rInner,endA);
+  const ei = polarPt(cx,cy,rInner,startA);
+  const large = (endA-startA) > 180 ? 1 : 0;
+  return `M ${so.x} ${so.y} A ${rOuter} ${rOuter} 0 ${large} 0 ${eo.x} ${eo.y} L ${ei.x} ${ei.y} A ${rInner} ${rInner} 0 ${large} 1 ${si.x} ${si.y} Z`;
+}
+
+function donutSvg(data, size, centerLabel){
+  const cx = size/2, cy = size/2, rOuter = size/2 - 4, rInner = rOuter*0.55;
+  const rLabel = (rOuter + rInner) / 2;
+  const centerText = centerLabel ? `
+    <text x="${cx}" y="${cy-4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="${size*0.10}" fill="var(--ink)" font-weight="600">${centerLabel.top}</text>
+    <text x="${cx}" y="${cy+size*0.09}" text-anchor="middle" font-family="Inter, sans-serif" font-size="${size*0.055}" fill="var(--muted)">${centerLabel.bottom}</text>` : "";
+
+  function labelFor(d, midA){
+    if(d.share < 0.06) return ""; // skip labels on slivers, legend still covers them
+    const pt = polarPt(cx,cy,rLabel,midA);
+    const pct = Math.round(d.share*100);
+    // pick readable text colour against the wedge fill
+    const dark = ["white","tan","yellow","gold","silver"].includes(d.key) || d.key==="unspecified";
+    return `<text x="${pt.x}" y="${pt.y}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono, monospace" font-size="${size*0.075}" font-weight="600" fill="${dark ? 'var(--ink)' : '#fff'}">${pct}%</text>`;
+  }
+
+  if(!data.length){
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${cx}" cy="${cy}" r="${rOuter}" fill="none" stroke="var(--line)" stroke-width="1"/></svg>`;
+  }
+  if(data.length===1){
+    const p1 = donutSlicePath(cx,cy,rOuter,rInner,0,180);
+    const p2 = donutSlicePath(cx,cy,rOuter,rInner,180,360);
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+      <path d="${p1}" fill="${data[0].hex}" stroke="${data[0].hex}" stroke-width="0.75"/>
+      <path d="${p2}" fill="${data[0].hex}" stroke="${data[0].hex}" stroke-width="0.75"/>
+      ${centerText}
+    </svg>`;
+  }
+  let angle = 0;
+  const paths = data.map(d=>{
+    const start = angle;
+    const end = angle + d.share*360;
+    const mid = (start+end)/2;
+    angle = end;
+    return `<path d="${donutSlicePath(cx,cy,rOuter,rInner,start,end)}" fill="${d.hex}" stroke="${d.hex}" stroke-width="0.75"/>${labelFor(d,mid)}`;
+  }).join("");
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" shape-rendering="geometricPrecision">${paths}${centerText}</svg>`;
+}
+
+function legendHtml(data){
+  if(!data.length) return `<div class="empty" style="padding:8px 0;">No colour data yet.</div>`;
+  return `<div class="legend">${data.map(d=>`
+    <div class="legend-row">
+      <span class="swatch" style="background:${d.hex}"></span>
+      <span class="legend-name">${d.key}</span>
+      <span class="legend-pct">${Math.round(d.share*100)}%</span>
+    </div>`).join("")}</div>`;
+}
+
+let colourTab = "total";
+
+function renderColourSection(){
+  const container = document.getElementById("colourContainer");
+  if(!state.looks.length){
+    container.innerHTML = `<div class="empty">Tag some looks to see the colour breakdown.</div>`;
+    return;
+  }
+  if(colourTab === "total"){
+    const data = computeColourBreakdown(null);
+    const centerLabel = data.length ? { top: Math.round(data[0].share*100)+"%", bottom: data[0].key } : null;
+    container.innerHTML = `
+    <div class="donut-panel">
+      <div>${donutSvg(data, 180, centerLabel)}</div>
+      <div>
+        <h4>${state.season || "Season"} — all houses</h4>
+        <div class="donut-meta">${state.looks.length} looks across ${state.houses.length} houses</div>
+        ${legendHtml(data)}
+      </div>
+    </div>`;
+  } else {
+    container.innerHTML = `<div class="house-grid">${state.houses.map(h=>{
+      const data = computeColourBreakdown(h.id);
+      const lookCount = state.looks.filter(l=>l.houseId===h.id).length;
+      const centerLabel = data.length ? { top: Math.round(data[0].share*100)+"%", bottom: data[0].key } : null;
+      return `
+      <div class="donut-panel">
+        ${donutSvg(data, 140, centerLabel)}
+        <h4>${h.name}</h4>
+        <div class="donut-meta">${lookCount} looks</div>
+        ${legendHtml(data)}
+      </div>`;
+    }).join("")}</div>`;
+  }
+}
+
+document.querySelectorAll("[data-ctab]").forEach(tab=>{
+  tab.addEventListener("click", ()=>{
+    document.querySelectorAll("[data-ctab]").forEach(t=>t.classList.remove("active"));
+    tab.classList.add("active");
+    colourTab = tab.dataset.ctab;
+    renderColourSection();
+  });
+});
+
+// ---------- event delegation for editable fields ----------
+document.getElementById("housesContainer").addEventListener("click", (e)=>{
+  const houseHead = e.target.closest(".house-head");
+  if(houseHead && !e.target.closest(".del-house")){
+    const group = houseHead.closest(".house-group");
+    const id = group.dataset.houseId;
+    if(openHouses.has(id)) openHouses.delete(id); else openHouses.add(id);
+    renderHouses();
+    return;
+  }
+  if(e.target.closest(".del-house")){
+    const group = e.target.closest(".house-group");
+    const id = group.dataset.houseId;
+    if(confirm("Delete this house and all its tagged looks?")){
+      state.houses = state.houses.filter(h=>h.id!==id);
+      state.looks = state.looks.filter(l=>l.houseId!==id);
+      renderAll(); scheduleSave();
+    }
+    return;
+  }
+  if(e.target.closest(".del-look")){
+    const card = e.target.closest(".look-card");
+    const id = card.dataset.lookId;
+    state.looks = state.looks.filter(l=>l.id!==id);
+    renderAll(); scheduleSave();
+    return;
+  }
+  if(e.target.classList.contains("g-remove")){
+    const row = e.target.closest(".garment-row");
+    const lookId = row.dataset.look, gIdx = +row.dataset.gidx;
+    const look = state.looks.find(l=>l.id===lookId);
+    look.garments.splice(gIdx,1);
+    renderAll(); scheduleSave();
+    return;
+  }
+  if(e.target.classList.contains("a-remove")){
+    const row = e.target.closest(".acc-row");
+    const lookId = row.dataset.look, aIdx = +row.dataset.aidx;
+    const look = state.looks.find(l=>l.id===lookId);
+    look.accessories.splice(aIdx,1);
+    renderAll(); scheduleSave();
+    return;
+  }
+  if(e.target.classList.contains("add-garment")){
+    const card = e.target.closest(".look-card");
+    const look = state.looks.find(l=>l.id===card.dataset.lookId);
+    look.garments.push({piece:"top",type:"",fit:"",fabricTreatment:"",colour:"",details:""});
+    renderAll(); scheduleSave();
+    return;
+  }
+  if(e.target.classList.contains("add-acc")){
+    const card = e.target.closest(".look-card");
+    const look = state.looks.find(l=>l.id===card.dataset.lookId);
+    look.accessories.push({type:"bag",detail:""});
+    renderAll(); scheduleSave();
+    return;
+  }
+});
+
+document.getElementById("housesContainer").addEventListener("input", (e)=>{
+  const gRow = e.target.closest(".garment-row");
+  if(gRow){
+    const look = state.looks.find(l=>l.id===gRow.dataset.look);
+    const g = look.garments[+gRow.dataset.gidx];
+    if(e.target.classList.contains("g-piece")) g.piece = e.target.value;
+    if(e.target.classList.contains("g-type")) g.type = e.target.value;
+    if(e.target.classList.contains("g-fit")) g.fit = e.target.value;
+    if(e.target.classList.contains("g-treat")) g.fabricTreatment = e.target.value;
+    if(e.target.classList.contains("g-colour")) g.colour = e.target.value;
+    if(e.target.classList.contains("g-details")) g.details = e.target.value;
+    scheduleSave();
+    return;
+  }
+  const aRow = e.target.closest(".acc-row");
+  if(aRow){
+    const look = state.looks.find(l=>l.id===aRow.dataset.look);
+    const a = look.accessories[+aRow.dataset.aidx];
+    if(e.target.classList.contains("a-type")) a.type = e.target.value;
+    if(e.target.classList.contains("a-detail")) a.detail = e.target.value;
+    scheduleSave();
+    return;
+  }
+  const card = e.target.closest(".look-card");
+  if(card){
+    const look = state.looks.find(l=>l.id===card.dataset.lookId);
+    if(e.target.classList.contains("f-type")){ look.footwear.type = e.target.value; scheduleSave(); }
+    if(e.target.classList.contains("f-colour")){ look.footwear.colour = e.target.value; scheduleSave(); }
+    if(e.target.classList.contains("coord-check")){ look.coordSet = e.target.checked; scheduleSave(); }
+    if(e.target.classList.contains("notes-field")){ look.notes = e.target.value; scheduleSave(); }
+  }
+});
+
+// ---------- export ----------
+function toCsv(){
+  const rows = [["House","Look","Piece","Type","Fit","Fabric Treatment","Colour","Details"]];
+  state.looks.forEach(look=>{
+    const house = state.houses.find(h=>h.id===look.houseId);
+    if(!look.garments.length){
+      rows.push([house?house.name:"", look.lookNumber, "", "", "", "", "", ""]);
+    }
+    look.garments.forEach(g=>{
+      rows.push([house?house.name:"", look.lookNumber, g.piece||"", g.type||"", g.fit||"", g.fabricTreatment||"", g.colour||"", g.details||""]);
+    });
+  });
+  return rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
+}
+
+function downloadFile(content, filename, mime){
+  const blob = new Blob([content], {type:mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById("exportCsv").addEventListener("click", ()=>{
+  downloadFile(toCsv(), `${(state.season||"season").replace(/\s+/g,"_")}_looks.csv`, "text/csv");
+});
+document.getElementById("exportJson").addEventListener("click", ()=>{
+  downloadFile(JSON.stringify(state,null,2), `${(state.season||"season").replace(/\s+/g,"_")}_data.json`, "application/json");
+});
+document.getElementById("resetAll").addEventListener("click", async ()=>{
+  if(confirm("This clears all tagged data for this season. Are you sure?")){
+    state = { season: state.season, houses: [], looks: [] };
+    renderAll();
+    try{ await saveOnce(); setSaveIndicator("saved \u2713", false); }catch(e){ setSaveIndicator("not saved \u2014 storage error", true); }
+  }
+});
+
+document.getElementById("importInput").addEventListener("change", async (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  try{
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    if(!parsed || !Array.isArray(parsed.houses) || !Array.isArray(parsed.looks)){
+      alert("This file doesn't look like a valid export from this tool.");
+      return;
+    }
+    if(state.looks.length || state.houses.length){
+      if(!confirm("This will replace everything currently in the tool with the imported file. Continue?")) return;
+    }
+    state = parsed;
+    document.getElementById("seasonInput").value = state.season || "";
+    renderAll();
+    try{ await saveOnce(); setSaveIndicator("saved \u2713", false); }
+    catch(err){ setSaveIndicator("imported, but not saved \u2014 storage error, export again as backup", true); }
+  }catch(err){
+    console.error(err);
+    alert("Couldn't read that file — make sure it's a JSON export from this tool.");
+  }
+  e.target.value = "";
+});
+
+// ---------- render all ----------
+function render(){ renderHouses(); renderReport(); renderColourSection(); }
+function renderAll(){ render(); }
+
+loadState();
+</script>
+</body>
+</html>
