@@ -241,6 +241,7 @@
     </div>
     <div class="status-line" id="statusLine"></div>
   </div>
+  <div id="queueContainer" style="margin-top:16px;"></div>
 
   <div class="section-title"><span class="num">02</span><h2>Review &amp; correct</h2><div class="line"></div></div>
   <div id="housesContainer"></div>
@@ -260,7 +261,9 @@
   <div id="colourContainer"></div>
 
   <div class="export-row">
+    <button class="btn-ghost btn" id="exportExcel">Export full Excel (all tabs)</button>
     <button class="btn-ghost btn" id="exportCsv">Export CSV</button>
+    <button class="btn-ghost btn" id="exportColourCsv">Export colour hex CSV</button>
     <button class="btn-ghost btn" id="exportJson">Export JSON</button>
     <div class="file-btn btn-ghost btn" style="display:inline-flex;">
       <span>Import JSON</span>
@@ -274,6 +277,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-compat.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" crossorigin="anonymous"></script>
 <script>
 window.addEventListener("error", function(e){
   const banner = document.getElementById("errorBanner");
@@ -540,7 +544,7 @@ document.getElementById("seasonInput").addEventListener("input", (e)=>{
   scheduleSave();
 });
 
-document.getElementById("tagBtn").addEventListener("click", async ()=>{
+document.getElementById("tagBtn").addEventListener("click", ()=>{
   const nameInput = document.getElementById("houseNameInput");
   const fileInput = document.getElementById("fileInput");
   const statusLine = document.getElementById("statusLine");
@@ -550,48 +554,92 @@ document.getElementById("tagBtn").addEventListener("click", async ()=>{
   if(!houseName){ statusLine.textContent = "Add a house name first."; return; }
   if(!files.length){ statusLine.textContent = "Choose at least one contact sheet image."; return; }
 
-  let house = state.houses.find(h=>h.name.toLowerCase()===houseName.toLowerCase());
-  if(!house){ house = { id: uid("house"), name: houseName }; state.houses.push(house); }
-  openHouses.add(house.id);
+  statusLine.textContent = "";
+  enqueueHouseJob(houseName, files);
 
-  const tagBtn = document.getElementById("tagBtn");
-  tagBtn.disabled = true;
-
-  let addedCount = 0;
-  let failCount = 0;
-  let logLines = [];
-
-  function renderLog(){
-    statusLine.innerHTML = logLines.map(l=>`<div>${l}</div>`).join("");
-  }
-
-  for(let i=0;i<files.length;i++){
-    logLines.push(`Tagging image ${i+1} of ${files.length} for ${houseName}\u2026`);
-    renderLog();
-    try{
-      const looks = await tagImageFile(files[i], house.id);
-      state.looks.push(...looks);
-      addedCount += looks.length;
-      logLines[logLines.length-1] = `Image ${i+1}: added ${looks.length} look(s).`;
-      renderLog();
-      render();
-      scheduleSave();
-    }catch(err){
-      console.error(err);
-      failCount++;
-      logLines[logLines.length-1] = `<span style="color:var(--red)">Image ${i+1} failed: ${err.message}</span>`;
-      renderLog();
-    }
-  }
-
-  logLines.push(`<strong>Done. Added ${addedCount} look(s) for ${houseName}${failCount ? ", " + failCount + " image(s) failed" : ""}.</strong>`);
-  renderLog();
-  render();
   fileInput.value = "";
   document.getElementById("fileBtnLabel").textContent = "Choose images";
   nameInput.value = "";
-  tagBtn.disabled = false;
+  nameInput.focus();
 });
+
+// ---------- tagging queue: process houses one after another without blocking the form ----------
+const taggingQueue = [];
+let queueRunning = false;
+
+function enqueueHouseJob(houseName, files){
+  const jobId = uid("job");
+  taggingQueue.push({ jobId, houseName, files });
+  renderQueueJobCard(jobId, houseName, files.length, "queued");
+  if(!queueRunning) processQueue();
+}
+
+function renderQueueJobCard(jobId, houseName, fileCount, status){
+  const container = document.getElementById("queueContainer");
+  const card = document.createElement("div");
+  card.id = jobId;
+  card.className = "panel";
+  card.style.marginBottom = "10px";
+  card.style.padding = "12px 16px";
+  card.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;">
+    <strong style="font-family:var(--serif);font-size:15px;">${houseName}</strong>
+    <span class="job-status" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);">${status}</span>
+  </div>
+  <div class="job-log" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);margin-top:6px;"></div>`;
+  container.prepend(card);
+}
+
+function updateJobStatus(jobId, status, isError){
+  const card = document.getElementById(jobId);
+  if(!card) return;
+  const el = card.querySelector(".job-status");
+  el.textContent = status;
+  el.style.color = isError ? "var(--red)" : "var(--muted)";
+}
+
+function appendJobLog(jobId, line){
+  const card = document.getElementById(jobId);
+  if(!card) return;
+  const log = card.querySelector(".job-log");
+  const div = document.createElement("div");
+  div.innerHTML = line;
+  log.appendChild(div);
+}
+
+async function processQueue(){
+  queueRunning = true;
+  while(taggingQueue.length){
+    const job = taggingQueue.shift();
+    updateJobStatus(job.jobId, "processing\u2026");
+
+    let house = state.houses.find(h=>h.name.toLowerCase()===job.houseName.toLowerCase());
+    if(!house){ house = { id: uid("house"), name: job.houseName }; state.houses.push(house); }
+    openHouses.add(house.id);
+
+    let addedCount = 0;
+    let failCount = 0;
+
+    for(let i=0;i<job.files.length;i++){
+      updateJobStatus(job.jobId, `tagging image ${i+1} of ${job.files.length}\u2026`);
+      try{
+        const looks = await tagImageFile(job.files[i], house.id);
+        state.looks.push(...looks);
+        addedCount += looks.length;
+        appendJobLog(job.jobId, `Image ${i+1}: added ${looks.length} look(s).`);
+        render();
+        scheduleSave();
+      }catch(err){
+        console.error(err);
+        failCount++;
+        appendJobLog(job.jobId, `<span style="color:var(--red)">Image ${i+1} failed: ${err.message}</span>`);
+      }
+    }
+
+    updateJobStatus(job.jobId, `done \u2014 ${addedCount} look(s)${failCount ? ", " + failCount + " failed" : ""}`, failCount>0);
+    render();
+  }
+  queueRunning = false;
+}
 
 // ---------- render: houses & looks ----------
 const openHouses = new Set();
@@ -1061,6 +1109,74 @@ document.getElementById("housesContainer").addEventListener("input", (e)=>{
 });
 
 // ---------- export ----------
+function sanitizeSheetName(name){
+  return (name || "Sheet").replace(/[:\\\/\?\*\[\]]/g,"").slice(0,31) || "Sheet";
+}
+
+function buildWorkbook(){
+  const wb = XLSX.utils.book_new();
+
+  // Season overview — full trend report across all houses
+  const seasonRows = [["Trend","Look Share %","Look Count","Total Looks","House Count","Total Houses","House Share %"]];
+  computeSeasonReport().forEach(r=>{
+    seasonRows.push([r.tag, Math.round(r.lookShare*100), r.lookCount, state.looks.length, r.houseCount, state.houses.length, Math.round(r.houseShare*100)]);
+  });
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(seasonRows), "Season Overview");
+
+  // One tab per house — raw tagged garment data
+  const usedNames = new Set(["Season Overview"]);
+  state.houses.forEach(h=>{
+    const rows = [["Look","Piece","Type","Fit","Fabric Treatment","Colour","Details"]];
+    const looks = state.looks.filter(l=>l.houseId===h.id);
+    looks.forEach(look=>{
+      if(!look.garments.length){
+        rows.push([look.lookNumber,"","","","","",""]);
+      }
+      look.garments.forEach(g=>{
+        rows.push([look.lookNumber, g.piece||"", g.type||"", g.fit||"", g.fabricTreatment||"", g.colour||"", g.details||""]);
+      });
+    });
+    let name = sanitizeSheetName(h.name);
+    let suffix = 2;
+    while(usedNames.has(name)){ name = sanitizeSheetName(h.name).slice(0,28) + "_" + suffix; suffix++; }
+    usedNames.add(name);
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), name);
+  });
+
+  // Colour hex — season
+  const colourSeasonRows = [["Colour","Hex","Share %","Weight"]];
+  computeColourBreakdown(null).forEach(d=>{
+    colourSeasonRows.push([d.key, d.hex, Math.round(d.share*100), d.value.toFixed(2)]);
+  });
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(colourSeasonRows), "Colour Hex - Season");
+
+  // Colour hex — by house
+  const colourHouseRows = [["House","Colour","Hex","Share %","Weight"]];
+  state.houses.forEach(h=>{
+    computeColourBreakdown(h.id).forEach(d=>{
+      colourHouseRows.push([h.name, d.key, d.hex, Math.round(d.share*100), d.value.toFixed(2)]);
+    });
+  });
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(colourHouseRows), "Colour Hex - By House");
+
+  return wb;
+}
+
+function toColourCsv(){
+  const rows = [["Scope","Colour","Hex","Share %","Weight"]];
+  const total = computeColourBreakdown(null);
+  total.forEach(d=>{
+    rows.push(["TOTAL (season)", d.key, d.hex, Math.round(d.share*100), d.value.toFixed(2)]);
+  });
+  state.houses.forEach(h=>{
+    const data = computeColourBreakdown(h.id);
+    data.forEach(d=>{
+      rows.push([h.name, d.key, d.hex, Math.round(d.share*100), d.value.toFixed(2)]);
+    });
+  });
+  return rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
+}
+
 function toCsv(){
   const rows = [["House","Look","Piece","Type","Fit","Fabric Treatment","Colour","Details"]];
   state.looks.forEach(look=>{
@@ -1084,8 +1200,16 @@ function downloadFile(content, filename, mime){
   URL.revokeObjectURL(url);
 }
 
+document.getElementById("exportExcel").addEventListener("click", ()=>{
+  if(!state.looks.length){ alert("Tag some looks first."); return; }
+  const wb = buildWorkbook();
+  XLSX.writeFile(wb, `${(state.season||"season").replace(/\s+/g,"_")}_full_export.xlsx`);
+});
 document.getElementById("exportCsv").addEventListener("click", ()=>{
   downloadFile(toCsv(), `${(state.season||"season").replace(/\s+/g,"_")}_looks.csv`, "text/csv");
+});
+document.getElementById("exportColourCsv").addEventListener("click", ()=>{
+  downloadFile(toColourCsv(), `${(state.season||"season").replace(/\s+/g,"_")}_colours.csv`, "text/csv");
 });
 document.getElementById("exportJson").addEventListener("click", ()=>{
   downloadFile(JSON.stringify(state,null,2), `${(state.season||"season").replace(/\s+/g,"_")}_data.json`, "application/json");
