@@ -115,7 +115,7 @@
   .icon-btn.danger:hover{color:var(--red);}
 
   select, input[type=text]{font-family:var(--sans);}
-  .look-meta{display:grid;grid-template-columns:2fr 1.2fr 1.2fr 1fr 34px 1.2fr;gap:8px;margin-bottom:12px;align-items:end;}
+  .look-meta{display:grid;grid-template-columns:2fr 1.2fr 1.2fr 1fr 34px 78px 1.2fr;gap:8px;margin-bottom:12px;align-items:end;}
   .look-meta .lm{display:flex;flex-direction:column;gap:3px;}
   .lm span{font-size:10px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
   .look-meta select,.look-meta input[type=text]{font-size:12.5px;padding:6px 7px;border:1px solid var(--line);background:var(--white);border-radius:2px;width:100%;}
@@ -125,7 +125,8 @@
   .g-line{display:grid;gap:6px;align-items:center;}
   .g-line + .g-line{margin-top:6px;}
   .g-line.l1{grid-template-columns:1fr 1.5fr 0.9fr 1fr 1.4fr 1fr 26px;}
-  .g-line.l2{grid-template-columns:1.3fr 1fr 34px 1fr 2.4fr;}
+  .g-line.l2{grid-template-columns:1.3fr 1fr 34px 78px 1fr 2.2fr;}
+  input.hex-text{font-family:var(--mono) !important;font-size:11.5px !important;text-transform:uppercase;}
   .garment-row select, .garment-row input[type=text]{
     font-size:12.5px;padding:6px 7px;border:1px solid var(--line);background:var(--white);border-radius:2px;width:100%;min-width:0;
   }
@@ -191,6 +192,9 @@
   .swatch{width:12px;height:12px;border-radius:2px;flex-shrink:0;}
   .legend-name{flex:1;text-transform:capitalize;}
   .legend-pct{font-family:var(--mono);color:var(--muted);}
+  .legend-hex{font-family:var(--mono);font-size:11.5px;color:var(--ink);min-width:66px;}
+  .legend-count{font-family:var(--mono);font-size:11px;color:var(--muted);min-width:22px;text-align:right;}
+  .palette-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
   .house-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
   .house-grid .donut-panel{flex-direction:column;align-items:flex-start;margin-bottom:0;}
   .house-grid .legend{min-width:0;width:100%;}
@@ -207,7 +211,7 @@
     .look-meta .lm-formula{grid-column:1 / -1;}
     .g-line.l1{grid-template-columns:1fr 1fr;}
     .g-line.l1 .g-remove{grid-column:2;justify-self:end;}
-    .g-line.l2{grid-template-columns:1fr 1fr 34px;}
+    .g-line.l2{grid-template-columns:1fr 1fr;}
     .g-line.l2 .g-pattern{grid-column:1 / -1;}
     .g-line.l2 .g-notes{grid-column:1 / -1;}
     .acc-row{grid-template-columns:1fr;gap:6px;padding:8px;border:1px solid var(--line);border-radius:2px;margin-bottom:8px;background:var(--white);}
@@ -300,6 +304,13 @@
     <select id="colourModeSelect">
       <option value="looks">Dominant colour per look (sums to 100% of looks)</option>
       <option value="garments">Every garment</option>
+    </select>
+    <label>Hex detail</label>
+    <select id="paletteDetailSelect">
+      <option value="exact">Exact hex (only identical hexes grouped)</option>
+      <option value="fine" selected>Fine (groups hexes the eye can barely tell apart)</option>
+      <option value="medium">Medium (groups close shades)</option>
+      <option value="broad">Broad (one slice per shade family)</option>
     </select>
   </div>
   <div id="colourContainer"></div>
@@ -855,7 +866,7 @@ Tag EVERY distinct look/model in the image. There is no limit. If numbers are vi
 Per look:
 - outfitFormula: the outfit as a short formula, the way a fashion editor would say it, lowercase, e.g. "double-breasted blazer + mini skirt", "slip dress + cardigan", "velvet jacket + bow + pencil skirt".
 - silhouette: the overall shape of the whole look.
-- dominantColourName / dominantColourFamily / dominantHex: the ONE colour that covers most of the look.
+- dominantColourName / dominantColourFamily / dominantHex: the ONE colour that covers most of the look's visible surface, with its hex read the same way as the garment hexes below (and identical to that garment's hex when one garment provides it).
 - dominantMaterial: the fabric that covers most of the look.
 
 Per garment (one entry per visible piece, outer layer first; never invent hidden pieces):
@@ -866,7 +877,11 @@ ${typeGuide}
 - fabricTreatment: the finish (sheer, matte, glossy, metallic...).
 - colourName: a specific shade name, as a colour editor would write it ("butter yellow", "oxblood", "powder blue", "chocolate brown", "ecru", "chartreuse", "dove grey"), not just "yellow".
 - colourFamily: the family that shade belongs to. Use "multicolour" only for prints with no dominant colour.
-- hex: your best estimate of the shade as it appears in the photo, as #RRGGBB.
+- hex: the garment's colour as #RRGGBB. These hexes are used directly as the slices of a colour-share donut chart, so precision matters:
+  - Read the fabric's true mid-tone in even light: not the shadowed folds, not the specular highlights, and not the runway lighting cast.
+  - For sheer fabrics, give the colour of the fabric itself, not the skin or garment showing through.
+  - For prints, give the dominant ground colour (and use colourFamily "multicolour" only when no colour dominates).
+  - When the same colour appears on several garments or looks in this image, give it the same hex every time, so equal colours count as one slice.
 - pattern: "solid" unless there is a print or weave pattern.
 - details: every construction or embellishment detail you can see, e.g. embroidery, beading, ruffles, bows, draping, cut-outs, a cummerbund or sash at the waist, corsetry, feathers, fringe. Use an empty array if there are none.
 - detailNotes: a few words for anything the lists don't capture (e.g. "jet beaded collar", "cummerbund in contrast satin"). Empty string if nothing to add.
@@ -1126,7 +1141,8 @@ function garmentRowHtml(g, gIdx){
     <div class="g-line l2">
       <input data-gf="colourName" type="text" value="${esc(g.colourName)}" placeholder="shade, e.g. butter yellow">
       <select data-gf="colourFamily" title="colour family">${optionsHtml(COLOUR_FAMILIES, g.colourFamily)}</select>
-      <input data-gf="hex" type="color" value="${esc(g.hex || "#DFD3CD")}" title="hex ${esc(g.hex)}">
+      <input data-gf="hex" type="color" value="${esc(g.hex || "#DFD3CD")}" title="pick colour">
+      <input data-gf="hexText" class="hex-text" type="text" value="${esc(g.hex)}" placeholder="#RRGGBB" maxlength="7" title="exact hex">
       <select data-gf="pattern" class="g-pattern" title="pattern">${optionsHtml(PATTERNS, g.pattern)}</select>
       <input data-gf="detailNotes" class="g-notes" type="text" value="${esc(g.detailNotes)}" placeholder="detail notes">
     </div>
@@ -1165,7 +1181,8 @@ function lookCardHtml(look){
       <label class="lm"><span>Silhouette</span><select data-lf="silhouette">${optionsHtml(LOOK_SILHOUETTES, look.silhouette)}</select></label>
       <label class="lm"><span>Dominant colour</span><input data-lf="dcName" type="text" value="${esc(dc.name)}" placeholder="shade"></label>
       <label class="lm"><span>Family</span><select data-lf="dcFamily">${optionsHtml(COLOUR_FAMILIES, dc.family)}</select></label>
-      <label class="lm"><span>Hex</span><input data-lf="dcHex" type="color" value="${esc(dc.hex || "#DFD3CD")}"></label>
+      <label class="lm"><span>Pick</span><input data-lf="dcHex" type="color" value="${esc(dc.hex || "#DFD3CD")}"></label>
+      <label class="lm"><span>Hex</span><input data-lf="dcHexText" class="hex-text" type="text" value="${esc(dc.hex)}" placeholder="#RRGGBB" maxlength="7"></label>
       <label class="lm"><span>Dominant material</span><select data-lf="dominantMaterial">${groupedMaterialOptions(look.dominantMaterial)}</select></label>
     </div>
 
@@ -1458,6 +1475,114 @@ function computeShades(houseId, mode){
   }).sort((a,b)=> b.count-a.count || a.name.localeCompare(b.name));
 }
 
+// ---------- exact-hex palette (what the donut is built from) ----------
+// Every look (or garment) contributes its own estimated hex. Near-identical hexes inside the same
+// colour family are grouped into one slice, so the same oxblood estimated as #5A1E24 and #5C1F26
+// doesn't become two wedges. Each slice keeps the hex that was actually tagged most often.
+const PALETTE_DETAIL = {
+  exact:  { label: "Exact hex (only identical hexes grouped)", deltaE: 0 },
+  fine:   { label: "Fine (groups hexes the eye can barely tell apart)", deltaE: 6 },
+  medium: { label: "Medium (groups close shades)", deltaE: 12 },
+  broad:  { label: "Broad (one slice per shade family)", deltaE: 22 }
+};
+
+function hexToRgb(hex){ const h = validHex(hex) || "#999999"; return [1,3,5].map(i=> parseInt(h.slice(i,i+2),16)); }
+function rgbToLab(rgb){
+  const lin = rgb.map(v=>{ v/=255; return v<=0.04045 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); });
+  const x = (lin[0]*0.4124 + lin[1]*0.3576 + lin[2]*0.1805) / 0.95047;
+  const y = (lin[0]*0.2126 + lin[1]*0.7152 + lin[2]*0.0722);
+  const z = (lin[0]*0.0193 + lin[1]*0.1192 + lin[2]*0.9505) / 1.08883;
+  const f = t=> t > 0.008856 ? Math.cbrt(t) : 7.787*t + 16/116;
+  return [116*f(y) - 16, 500*(f(x)-f(y)), 200*(f(y)-f(z))];
+}
+function deltaE(a, b){ return Math.hypot(a[0]-b[0], a[1]-b[1], a[2]-b[2]); }
+
+function paletteDetail(){ const el = document.getElementById("paletteDetailSelect"); return (el && el.value) || "fine"; }
+
+function paletteSource(houseId, mode){
+  const looks = reportLooks(houseId);
+  const items = mode === "looks"
+    ? looks.map(l=> l.dominantColour || {})
+    : garmentsOf(looks).map(g=>({ name: g.colourName, family: g.colourFamily, hex: g.hex }));
+  return items
+    .filter(it=> it.hex || it.family || it.name)
+    .map(it=>({ name: String(it.name||"").toLowerCase().trim(), family: it.family || "", hex: validHex(it.hex) || hexFor(it.family || UNSPECIFIED.key) }));
+}
+
+// Whole-number % that add up to 100: round down, then hand the missing points to the biggest
+// leftovers. Equal counts always get equal % (DFB rule), even if that makes the total 99 or 101.
+function roundShares(counts){
+  const total = counts.reduce((a,b)=>a+b,0);
+  if(!total) return counts.map(()=>0);
+  const raw = counts.map(c=> c*100/total);
+  const pct = raw.map(Math.floor);
+  let missing = 100 - pct.reduce((a,b)=>a+b,0);
+  const groups = {};
+  counts.forEach((c,i)=> (groups[c] = groups[c] || []).push(i));
+  Object.values(groups)
+    .sort((a,b)=> (raw[b[0]]-pct[b[0]]) - (raw[a[0]]-pct[a[0]]) || counts[b[0]]-counts[a[0]])
+    .forEach(idx=>{
+      if(missing <= 0 || raw[idx[0]] === pct[idx[0]]) return;
+      if(missing >= idx.length / 2){ idx.forEach(i=> pct[i]++); missing -= idx.length; }
+    });
+  return pct;
+}
+
+function computePalette(houseId, mode, detail){
+  mode = mode || colourMode();
+  const threshold = PALETTE_DETAIL[detail || paletteDetail()].deltaE;
+  const items = paletteSource(houseId, mode);
+  const byHex = {};
+  items.forEach(it=>{
+    const u = byHex[it.hex] || (byHex[it.hex] = { hex: it.hex, count: 0, names: {}, families: {} });
+    u.count++;
+    if(it.name) u.names[it.name] = (u.names[it.name]||0) + 1;
+    if(it.family) u.families[it.family] = (u.families[it.family]||0) + 1;
+  });
+  const top = (o)=> Object.entries(o).sort((a,b)=> b[1]-a[1] || a[0].localeCompare(b[0])).map(e=>e[0])[0] || "";
+  const clusters = [];
+  Object.values(byHex).sort((a,b)=> b.count-a.count || a.hex.localeCompare(b.hex)).forEach(u=>{
+    const lab = rgbToLab(hexToRgb(u.hex));
+    const family = top(u.families);
+    let best = null, bestD = Infinity;
+    if(threshold > 0){
+      clusters.forEach(c=>{
+        if(family && c.family && family !== c.family) return;
+        const d = deltaE(c.lab, lab);
+        if(d <= threshold && d < bestD){ best = c; bestD = d; }
+      });
+    }
+    if(!best){
+      clusters.push({ family, lab, labSum: lab.map(v=> v*u.count), count: u.count, members: [u] });
+    } else {
+      best.members.push(u);
+      best.count += u.count;
+      best.labSum = best.labSum.map((v,i)=> v + lab[i]*u.count);
+      best.lab = best.labSum.map(v=> v/best.count);
+    }
+  });
+  const total = items.length;
+  const rows = clusters.map(c=>{
+    const names = {}, hexes = {};
+    c.members.forEach(m=>{
+      hexes[m.hex] = m.count;
+      Object.entries(m.names).forEach(([n,k])=> names[n] = (names[n]||0) + k);
+    });
+    return {
+      hex: top(hexes),
+      name: top(names) || c.family || "unnamed",
+      family: c.family,
+      count: c.count,
+      share: total ? c.count/total : 0,
+      hexes: Object.keys(hexes),
+      shades: Object.keys(names)
+    };
+  }).sort((a,b)=> b.count-a.count || a.name.localeCompare(b.name));
+  const pcts = roundShares(rows.map(r=>r.count));
+  rows.forEach((r,i)=> r.pct = pcts[i]);
+  return { rows, total, mode, detail: detail || paletteDetail() };
+}
+
 function neutralShare(data){
   return data.filter(d=> NEUTRAL_FAMILIES.includes(d.key)).reduce((a,d)=> a + d.share, 0);
 }
@@ -1482,11 +1607,13 @@ function donutSvg(data, size, centerLabel){
   const centerText = centerLabel ? `
     <text x="${cx}" y="${cy-4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="${size*0.10}" fill="var(--ink)" font-weight="600">${esc(centerLabel.top)}</text>
     <text x="${cx}" y="${cy+size*0.09}" text-anchor="middle" font-family="Century Gothic, Gill Sans, Trebuchet MS, sans-serif" font-size="${size*0.055}" fill="var(--muted)">${esc(centerLabel.bottom)}</text>` : "";
+  // Pale wedges get the same thin #D0CCC5 outline as the DFB donut spec, so white/cream stay visible.
+  const outline = (hex)=> luminance(hex) > 0.82 ? "#D0CCC5" : hex;
 
   function labelFor(d, midA){
     if(d.share < 0.04) return "";
     const pt = polarPt(cx,cy,rLabel,midA);
-    const pct = Math.round(d.share*100);
+    const pct = d.pct != null ? d.pct : Math.round(d.share*100);
     const fs = size * 0.065;
     return `<text x="${pt.x}" y="${pt.y}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono, monospace" font-size="${fs}" font-weight="400" fill="${luminance(d.hex) > 0.4 ? 'var(--ink)' : '#fff'}">${pct}%</text>`;
   }
@@ -1498,8 +1625,8 @@ function donutSvg(data, size, centerLabel){
     const p1 = donutSlicePath(cx,cy,rOuter,rInner,0,180);
     const p2 = donutSlicePath(cx,cy,rOuter,rInner,180,360);
     return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-      <path d="${p1}" fill="${data[0].hex}" stroke="${data[0].hex}" stroke-width="0.75"/>
-      <path d="${p2}" fill="${data[0].hex}" stroke="${data[0].hex}" stroke-width="0.75"/>
+      <path d="${p1}" fill="${data[0].hex}" stroke="${outline(data[0].hex)}" stroke-width="0.75"/>
+      <path d="${p2}" fill="${data[0].hex}" stroke="${outline(data[0].hex)}" stroke-width="0.75"/>
       ${centerText}
     </svg>`;
   }
@@ -1509,7 +1636,7 @@ function donutSvg(data, size, centerLabel){
     const end = angle + d.share*360;
     const mid = (start+end)/2;
     angle = end;
-    return `<path d="${donutSlicePath(cx,cy,rOuter,rInner,start,end)}" fill="${d.hex}" stroke="${d.hex}" stroke-width="0.75"/>${labelFor(d,mid)}`;
+    return `<path d="${donutSlicePath(cx,cy,rOuter,rInner,start,end)}" fill="${d.hex}" stroke="${outline(d.hex)}" stroke-width="0.75"/>${labelFor(d,mid)}`;
   }).join("");
   return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" shape-rendering="geometricPrecision">${paths}${centerText}</svg>`;
 }
@@ -1522,6 +1649,24 @@ function legendHtml(data){
       <span class="legend-name">${esc(d.key)}</span>
       <span class="legend-pct">${Math.round(d.share*100)}%</span>
     </div>`).join("")}</div>`;
+}
+
+function paletteLegendHtml(pal, limit){
+  if(!pal.rows.length) return `<div class="empty" style="padding:8px 0;">No colour data yet.</div>`;
+  const rows = limit ? pal.rows.slice(0, limit) : pal.rows;
+  return `<div class="legend">${rows.map(r=>`
+    <div class="legend-row" title="${esc(r.shades.join(", "))}${r.hexes.length > 1 ? " · grouped hexes: " + esc(r.hexes.join(" ")) : ""}">
+      <span class="swatch" style="background:${r.hex};${luminance(r.hex) > 0.82 ? "box-shadow:inset 0 0 0 1px #D0CCC5;" : ""}"></span>
+      <span class="legend-name">${esc(r.name)}</span>
+      <span class="legend-hex">${esc(r.hex)}</span>
+      <span class="legend-pct">${r.pct}%</span>
+      <span class="legend-count">${r.count}</span>
+    </div>`).join("")}</div>${limit && pal.rows.length > limit ? `<div class="donut-meta" style="margin-top:6px;">+ ${pal.rows.length-limit} smaller slices (in the JSON and Excel)</div>` : ""}`;
+}
+
+function paletteSumNote(pal){
+  const sum = pal.rows.reduce((a,r)=> a + r.pct, 0);
+  return sum === 100 ? "" : ` · rounded %s total ${sum} (equal counts kept equal)`;
 }
 
 function shadesTableHtml(shades, limit){
@@ -1539,7 +1684,58 @@ function shadesTableHtml(shades, limit){
   </table>${limit && shades.length > limit ? `<div class="sub-meta" style="margin-top:6px;">+ ${shades.length-limit} more shades in the Excel export</div>` : ""}`;
 }
 
+// The same JSON shape dfb-catwalk-decode reads, so `dfb_charts.py donut decode.json --field palette` draws it as-is.
+function capitalise(s){ s = String(s||""); return s.charAt(0).toUpperCase() + s.slice(1); }
+function shareList(pairs, hexOf){
+  const sorted = pairs.sort((a,b)=> b[1]-a[1] || a[0].localeCompare(b[0]));
+  const pcts = roundShares(sorted.map(p=>p[1]));
+  return sorted.map(([label,n],i)=>{
+    const it = { label: capitalise(label), pct: pcts[i], count: n };
+    if(hexOf) it.hex = hexOf(label);
+    return it;
+  });
+}
+function countBy(list, fn){
+  const c = {};
+  list.forEach(x=>{ const k = fn(x); if(k) c[k] = (c[k]||0) + 1; });
+  return Object.entries(c);
+}
+function buildDecodeJson(houseId){
+  const house = houseId ? state.houses.find(h=>h.id===houseId) : null;
+  const looks = reportLooks(houseId);
+  const pal = computePalette(houseId);
+  const approx = pal.mode !== "looks";
+  return {
+    brand: house ? house.name : "All houses",
+    season: state.season || "",
+    looks: looks.length,
+    source: "DFB Trend Tagger",
+    palette_method: (pal.mode === "looks" ? "dominant colour per look" : "every garment") + " · " + PALETTE_DETAIL[pal.detail].label,
+    palette: pal.rows.map(r=> Object.assign({ label: capitalise(r.name), pct: r.pct, hex: r.hex, count: r.count, hexes_grouped: r.hexes }, approx ? { approx: true } : {})),
+    silhouette: shareList(countBy(looks, l=> l.outfitFormula)),
+    material: shareList(countBy(looks, l=> l.dominantMaterial)),
+    colour_families: shareList(countBy(looks, l=> l.dominantColour && l.dominantColour.family), hexFor)
+  };
+}
+function slug(s){ return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""); }
+function downloadDecodeJson(houseId){
+  const d = buildDecodeJson(houseId);
+  downloadFile(JSON.stringify(d, null, 2), `${slug(d.brand)}-${slug(d.season || "season")}-palette.json`, "application/json");
+}
+function paletteText(houseId){
+  const pal = computePalette(houseId);
+  return pal.rows.map(r=> `${capitalise(r.name)}\t${r.hex}\t${r.pct}%\t${r.count}`).join("\n");
+}
+
 let colourTab = "total";
+
+function paletteActionsHtml(houseId){
+  const id = esc(houseId || "");
+  return `<div class="palette-actions">
+    <button class="btn-ghost btn btn-sm pal-json" data-house="${id}">Download donut JSON</button>
+    <button class="btn-ghost btn btn-sm pal-copy" data-house="${id}">Copy hex list</button>
+  </div>`;
+}
 
 function renderColourSection(){
   const container = document.getElementById("colourContainer");
@@ -1549,37 +1745,54 @@ function renderColourSection(){
   }
   const unit = colourMode() === "looks" ? "looks" : "garments";
   if(colourTab === "total"){
-    const data = computeColourBreakdown(null);
-    const centerLabel = data.length ? { top: Math.round(data[0].share*100)+"%", bottom: data[0].key } : null;
+    const pal = computePalette(null);
+    const families = computeColourBreakdown(null);
+    const centerLabel = pal.rows.length ? { top: pal.rows[0].pct+"%", bottom: pal.rows[0].name } : null;
     container.innerHTML = `
     <div class="donut-panel">
-      <div>${donutSvg(data, 180, centerLabel)}</div>
-      <div>
-        <h4>${esc(state.season || "Season")} — all houses</h4>
-        <div class="donut-meta">${reportLooks().length} looks across ${reportHouses().length} houses · share of ${unit} · ${Math.round(neutralShare(data)*100)}% neutrals</div>
-        ${legendHtml(data)}
+      <div>${donutSvg(pal.rows, 220, centerLabel)}</div>
+      <div style="flex:1;min-width:260px;">
+        <h4>${esc(state.season || "Season")}: all houses</h4>
+        <div class="donut-meta">${pal.total} ${unit} across ${reportHouses().length} houses · ${pal.rows.length} hex slices · ${Math.round(neutralShare(families)*100)}% neutrals${paletteSumNote(pal)}</div>
+        ${paletteLegendHtml(pal, 24)}
+        ${paletteActionsHtml("")}
       </div>
     </div>
+    <div class="sub-title">Colour families</div>
+    <div class="sub-meta">The same ${unit} rolled up into families</div>
+    <div class="donut-panel">${donutSvg(families, 140, families.length ? { top: Math.round(families[0].share*100)+"%", bottom: families[0].key } : null)}${legendHtml(families)}</div>
     <div class="sub-title">Shades</div>
-    <div class="sub-meta">Specific shade names behind the families, with the hex most often estimated for each</div>
+    <div class="sub-meta">Every shade name used, with the hex most often estimated for it</div>
     ${shadesTableHtml(computeShades(null), 30)}`;
   } else {
     container.innerHTML = `<div class="house-grid">${reportHouses().map(h=>{
-      const data = computeColourBreakdown(h.id);
+      const pal = computePalette(h.id);
+      const families = computeColourBreakdown(h.id);
       const lookCount = state.looks.filter(l=>l.houseId===h.id).length;
-      const centerLabel = data.length ? { top: Math.round(data[0].share*100)+"%", bottom: data[0].key } : null;
-      const shades = computeShades(h.id).slice(0,5);
+      const centerLabel = pal.rows.length ? { top: pal.rows[0].pct+"%", bottom: pal.rows[0].name } : null;
       return `
       <div class="donut-panel">
-        ${donutSvg(data, 140, centerLabel)}
+        ${donutSvg(pal.rows, 160, centerLabel)}
         <h4>${esc(h.name)}</h4>
-        <div class="donut-meta">${lookCount} looks · ${Math.round(neutralShare(data)*100)}% neutrals</div>
-        ${legendHtml(data)}
-        ${shades.length ? `<div class="donut-meta" style="margin:8px 0 0;">Top shades: ${shades.map(s=>`<span class="hex-swatch" style="background:${esc(s.hex)}"></span>${esc(s.name)}`).join(", ")}</div>` : ""}
+        <div class="donut-meta">${lookCount} looks · ${pal.rows.length} hex slices · ${Math.round(neutralShare(families)*100)}% neutrals${paletteSumNote(pal)}</div>
+        ${paletteLegendHtml(pal, 12)}
+        ${paletteActionsHtml(h.id)}
       </div>`;
     }).join("")}</div>`;
   }
 }
+
+document.getElementById("colourContainer").addEventListener("click", async (e)=>{
+  const json = e.target.closest(".pal-json");
+  const copy = e.target.closest(".pal-copy");
+  if(json) downloadDecodeJson(json.dataset.house || null);
+  if(copy){
+    const text = paletteText(copy.dataset.house || null);
+    try{ await navigator.clipboard.writeText(text); copy.textContent = "Copied ✓"; }
+    catch(err){ prompt("Copy the palette:", text.replace(/\t/g," ").replace(/\n/g," | ")); }
+    setTimeout(()=> copy.textContent = "Copy hex list", 1500);
+  }
+});
 
 document.querySelectorAll("[data-ctab]").forEach(tab=>{
   tab.addEventListener("click", ()=>{
@@ -1590,6 +1803,7 @@ document.querySelectorAll("[data-ctab]").forEach(tab=>{
   });
 });
 document.getElementById("colourModeSelect").addEventListener("change", renderColourSection);
+document.getElementById("paletteDetailSelect").addEventListener("change", renderColourSection);
 
 // ---------- over-index: what does a fabric / detail / colour sit on? ----------
 const OI_DIMENSIONS = {
@@ -1790,7 +2004,17 @@ function onFieldEdit(e){
   if(gRow && t.dataset.gf){
     const g = look.garments[+gRow.dataset.gidx];
     const f = t.dataset.gf;
-    g[f] = f === "hex" ? validHex(t.value) : t.value;
+    if(f === "hex" || f === "hexText"){
+      // Picker and typed hex stay in sync; a half-typed hex is ignored until it's valid.
+      const v = validHex(t.value);
+      if(!v) return;
+      g.hex = v;
+      const other = gRow.querySelector(f === "hex" ? "[data-gf=hexText]" : "[data-gf=hex]");
+      if(other && other !== t) other.value = f === "hex" ? v : v.toLowerCase();
+      scheduleAnalysisRender(); scheduleSave();
+      return;
+    }
+    g[f] = t.value;
     if(f === "colourName" && !g.colourFamily){
       g.colourFamily = familyFromName(g.colourName);
     }
@@ -1817,7 +2041,13 @@ function onFieldEdit(e){
   else if(f === "dominantMaterial") look.dominantMaterial = t.value;
   else if(f === "dcName"){ dc.name = t.value; if(!dc.family) dc.family = familyFromName(t.value); }
   else if(f === "dcFamily") dc.family = t.value;
-  else if(f === "dcHex") dc.hex = validHex(t.value);
+  else if(f === "dcHex" || f === "dcHexText"){
+    const v = validHex(t.value);
+    if(!v) return;
+    dc.hex = v;
+    const other = t.closest(".look-meta").querySelector(f === "dcHex" ? "[data-lf=dcHexText]" : "[data-lf=dcHex]");
+    if(other && other !== t) other.value = f === "dcHex" ? v : v.toLowerCase();
+  }
   else if(f === "footType") look.footwear.type = t.value;
   else if(f === "footColour") look.footwear.colour = t.value;
   else if(f === "coordSet") look.coordSet = t.checked;
@@ -1917,8 +2147,18 @@ function buildWorkbook(){
   computeShades(null, "garments").forEach(s=> shadeRows.push([s.name, s.family, s.hex, s.count, Math.round(s.share*100)]));
   addSheet(shadeRows, "Colour Shades");
 
+  // Palette: the exact hex slices behind the donut, for the season and each house (current count + detail settings)
+  const pm = computePalette(null);
+  const palRows = [["Scope","Slice","Hex","Count","Share % (rounded)","Exact share %","Colour family","Shade names grouped","Hexes grouped"]];
+  const addPal = (scope, pal)=> pal.rows.forEach(r=> palRows.push([scope, capitalise(r.name), r.hex, r.count, r.pct, Math.round(r.share*10000)/100, r.family, r.shades.join(", "), r.hexes.join(" ")]));
+  addPal("Season", pm);
+  reportHouses().forEach(h=> addPal(h.name, computePalette(h.id)));
+  palRows.push([]);
+  palRows.push(["Counted by", pm.mode === "looks" ? "dominant colour per look" : "every garment", "Hex detail", PALETTE_DETAIL[pm.detail].label]);
+  addSheet(palRows, "Palette (donut)");
+
   // One tab per house: one row per garment
-  const usedNames = new Set(["Season Overview","Materials","Silhouettes","Details","Over-index","Colour Shades","Colour Hex - Season","Colour Hex - By House"]);
+  const usedNames = new Set(["Palette (donut)","Season Overview","Materials","Silhouettes","Details","Over-index","Colour Shades","Colour Hex - Season","Colour Hex - By House"]);
   reportHouses().forEach(h=>{
     const rows = [LOOK_HEADERS.concat(GARMENT_HEADERS)];
     state.looks.filter(l=>l.houseId===h.id).forEach(look=>{
@@ -1957,6 +2197,8 @@ function csvOf(rows){
 
 function toColourCsv(){
   const rows = [["Scope","Level","Colour","Family","Hex","Share %","Count"]];
+  computePalette(null).rows.forEach(r=> rows.push(["TOTAL (season)","donut slice",capitalise(r.name),r.family,r.hex,r.pct,r.count]));
+  reportHouses().forEach(h=> computePalette(h.id).rows.forEach(r=> rows.push([h.name,"donut slice",capitalise(r.name),r.family,r.hex,r.pct,r.count])));
   computeColourBreakdown(null).forEach(d=> rows.push(["TOTAL (season)","family",d.key,d.key,d.hex,Math.round(d.share*100),d.value]));
   computeShades(null).forEach(s=> rows.push(["TOTAL (season)","shade",s.name,s.family,s.hex,Math.round(s.share*100),s.count]));
   reportHouses().forEach(h=>{
