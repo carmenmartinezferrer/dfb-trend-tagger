@@ -20,6 +20,7 @@
     --white:#ffffff;
     --serif:'DM Serif Display', Georgia, serif;
     --sans:'Century Gothic','Gill Sans','Trebuchet MS',sans-serif;
+    --mono:'JetBrains Mono',monospace;
   }
   *{box-sizing:border-box;}
   body{
@@ -38,27 +39,32 @@
   h1 em{font-style:italic;color:var(--pink);}
   .sub{color:var(--muted);font-size:14.5px;max-width:640px;line-height:1.5;margin-bottom:20px;}
   .season-row{display:flex;align-items:center;gap:10px;}
-  .season-row label{font-size:11px;color:var(--muted);font-family:var(--sans);letter-spacing:.1em;text-transform:uppercase;}
+  .season-row + .season-row{margin-top:12px;}
+  .season-row label{font-size:11px;color:var(--muted);font-family:var(--sans);letter-spacing:.1em;text-transform:uppercase;min-width:64px;}
   .season-row input{
     font-family:var(--serif);font-size:18px;font-weight:400;
     border:none;border-bottom:2px solid var(--pink);background:transparent;
     padding:4px 2px;color:var(--ink);min-width:280px;
   }
   .season-row input:focus{outline:none;border-bottom-color:var(--pink-deep);}
+  .season-row select{font-size:12.5px;padding:6px 8px;border:1px solid var(--line);border-radius:2px;background:var(--white);font-family:var(--sans);}
+  .meta-note{font-family:var(--mono);font-size:11px;color:var(--muted);}
+  .uid-code{font-family:var(--mono);font-size:11px;background:var(--paper-dim);padding:2px 6px;border-radius:2px;user-select:all;}
 
   /* section titles */
   .section-title{
     display:flex;align-items:baseline;gap:10px;margin:44px 0 18px;
   }
-  .section-title .num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--pink);}
+  .section-title .num{font-family:var(--mono);font-size:12px;color:var(--pink);}
   .section-title h2{font-family:var(--serif);font-weight:400;font-size:22px;margin:0;letter-spacing:-.02em;}
   .section-title .line{flex:1;height:1px;background:var(--line);}
+  .section-intro{color:var(--muted);font-size:13px;margin:-8px 0 16px;max-width:720px;line-height:1.5;}
 
   /* add house panel */
   .panel{background:var(--white);border:1px solid var(--line);border-radius:2px;padding:22px;}
   .add-house{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
   .field{display:flex;flex-direction:column;gap:6px;}
-  .field label{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+  .field label{font-size:11px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
   .field input[type=text]{
     border:1px solid var(--line);padding:9px 11px;font-size:14px;font-family:var(--sans);
     background:var(--paper-dim);min-width:220px;border-radius:2px;
@@ -71,7 +77,6 @@
   }
   .file-btn input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
   .file-btn:hover{background:#2a2226;}
-  .file-count{font-size:12.5px;color:var(--muted);}
   .btn{
     padding:10px 18px;background:var(--ink);color:var(--white);border:none;font-size:13px;
     font-weight:600;font-family:var(--sans);border-radius:2px;cursor:pointer;letter-spacing:.01em;
@@ -82,17 +87,19 @@
   .btn-ghost:hover{background:var(--paper-dim);}
   .btn-sm{padding:6px 12px;font-size:12px;}
 
-  .status-line{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--pink-deep);margin-top:14px;min-height:16px;}
+  .status-line{font-family:var(--mono);font-size:12px;color:var(--pink-deep);margin-top:14px;min-height:16px;}
 
   /* house groups */
   .house-group{margin-bottom:26px;border:1px solid var(--line);background:var(--white);}
+  .house-group.excluded .house-head{opacity:.55;}
   .house-head{
     display:flex;align-items:center;justify-content:space-between;padding:14px 18px;
-    background:var(--paper-dim);cursor:pointer;
+    background:var(--paper-dim);cursor:pointer;gap:12px;
   }
   .house-head h3{font-family:var(--serif);font-size:17px;font-weight:600;margin:0;}
-  .house-head .count{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);}
+  .house-head .count{font-family:var(--mono);font-size:11.5px;color:var(--muted);}
   .house-head .toggle{font-size:13px;color:var(--pink-deep);}
+  .excl-badge{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line);padding:2px 6px;border-radius:2px;margin-left:8px;}
   .house-body{padding:16px 18px;display:none;}
   .house-body.open{display:block;}
 
@@ -101,23 +108,40 @@
     background:var(--paper);
   }
   .look-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-  .look-head .tag{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--ink);color:var(--white);padding:2px 8px;border-radius:2px;}
+  .look-head .tag{font-family:var(--mono);font-size:12px;background:var(--ink);color:var(--white);padding:2px 8px;border-radius:2px;}
   .look-head .actions{display:flex;gap:8px;}
   .icon-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;font-family:var(--sans);text-decoration:underline;padding:2px;}
-  .icon-btn:hover{color:var(--red);}
+  .icon-btn:hover{color:var(--ink);}
+  .icon-btn.danger:hover{color:var(--red);}
 
-  .garment-row{display:grid;grid-template-columns:100px 1fr 1fr 1fr 1fr 1.3fr 26px;gap:8px;margin-bottom:6px;align-items:center;}
-  .garment-row select, .garment-row input{
-    font-size:12.5px;padding:6px 7px;border:1px solid var(--line);background:var(--white);border-radius:2px;font-family:var(--sans);
+  select, input[type=text]{font-family:var(--sans);}
+  .look-meta{display:grid;grid-template-columns:2fr 1.2fr 1.2fr 1fr 34px 1.2fr;gap:8px;margin-bottom:12px;align-items:end;}
+  .look-meta .lm{display:flex;flex-direction:column;gap:3px;}
+  .lm span{font-size:10px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+  .look-meta select,.look-meta input[type=text]{font-size:12.5px;padding:6px 7px;border:1px solid var(--line);background:var(--white);border-radius:2px;width:100%;}
+  input[type=color]{width:34px;height:30px;padding:0 2px;border:1px solid var(--line);border-radius:2px;background:var(--white);cursor:pointer;}
+
+  .garment-row{border:1px solid var(--line);background:var(--white);border-radius:2px;padding:8px;margin-bottom:8px;}
+  .g-line{display:grid;gap:6px;align-items:center;}
+  .g-line + .g-line{margin-top:6px;}
+  .g-line.l1{grid-template-columns:1fr 1.5fr 0.9fr 1fr 1.4fr 1fr 26px;}
+  .g-line.l2{grid-template-columns:1.3fr 1fr 34px 1fr 2.4fr;}
+  .garment-row select, .garment-row input[type=text]{
+    font-size:12.5px;padding:6px 7px;border:1px solid var(--line);background:var(--white);border-radius:2px;width:100%;min-width:0;
   }
-  .row-label{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);}
-  .mini-head{display:grid;grid-template-columns:100px 1fr 1fr 1fr 1fr 1.3fr 26px;gap:8px;margin-bottom:4px;}
-  .mini-head span{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+  .g-details{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:6px;}
+  .chip{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-family:var(--mono);background:var(--paper-dim);color:var(--ink);padding:2px 4px 2px 7px;border-radius:2px;}
+  .chip button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;padding:0 2px;}
+  .chip button:hover{color:var(--red);}
+  .g-details select{width:auto !important;font-size:11.5px !important;padding:3px 5px !important;}
+  .g-details input[type=text]{flex:1;min-width:140px;}
+  .mini-head{display:grid;grid-template-columns:1fr 1.5fr 0.9fr 1fr 1.4fr 1fr 26px;gap:6px;margin:0 9px 4px;}
+  .mini-head span{font-size:10px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
 
   .sub-block{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
-  .sub-block-title{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--pink-deep);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
-  .acc-row{display:grid;grid-template-columns:140px 1fr 26px;gap:8px;margin-bottom:6px;}
-  .acc-row select,.acc-row input{font-size:12.5px;padding:6px 7px;border:1px solid var(--line);background:var(--white);border-radius:2px;}
+  .sub-block-title{font-size:11px;font-family:var(--mono);color:var(--pink-deep);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+  .acc-row{display:grid;grid-template-columns:140px 1fr 1.4fr 26px;gap:8px;margin-bottom:6px;}
+  .acc-row select,.acc-row input{font-size:12.5px;padding:6px 7px;border:1px solid var(--line);background:var(--white);border-radius:2px;min-width:0;}
   .foot-row{display:grid;grid-template-columns:140px 1fr;gap:8px;}
   .foot-row select,.foot-row input{font-size:12.5px;padding:6px 7px;border:1px solid var(--line);background:var(--white);border-radius:2px;}
   .coord-row{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12.5px;}
@@ -125,39 +149,48 @@
   .notes-row textarea{width:100%;font-size:12.5px;padding:7px;border:1px solid var(--line);border-radius:2px;font-family:var(--sans);resize:vertical;min-height:32px;}
   .add-small{font-size:11.5px;color:var(--pink-deep);background:none;border:none;cursor:pointer;text-decoration:underline;padding:2px 0;}
 
-  .empty{color:var(--muted);font-size:13.5px;padding:30px 0;text-align:center;font-family:'JetBrains Mono',monospace;}
+  .empty{color:var(--muted);font-size:13.5px;padding:30px 0;text-align:center;font-family:var(--mono);}
 
   /* report */
-  .tabs{display:flex;gap:24px;margin-bottom:20px;border-bottom:1px solid var(--line);}
+  .tabs{display:flex;gap:24px;margin-bottom:20px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
   .tab{
     padding:0 0 10px;font-size:13px;font-family:var(--sans);font-weight:500;background:none;border:none;
     border-bottom:2px solid transparent;cursor:pointer;color:var(--muted);letter-spacing:.01em;
     margin-bottom:-1px;
   }
   .tab.active{color:var(--ink);border-bottom-color:var(--pink-deep);font-weight:600;}
+  .cat-filter{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .cat-pill{font-family:var(--mono);font-size:11px;padding:4px 9px;border:1px solid var(--line);background:var(--white);border-radius:2px;cursor:pointer;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+  .cat-pill.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
   table{width:100%;border-collapse:collapse;background:var(--white);}
-  th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--line);}
+  th{text-align:left;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--line);}
   td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--paper-dim);}
+  td.num{font-family:var(--mono);font-size:12.5px;}
+  td.hot{color:var(--pink-deep);font-weight:600;}
   .bar-cell{display:flex;align-items:center;gap:8px;}
   .bar-track{flex:1;height:6px;background:var(--paper-dim);border-radius:3px;overflow:hidden;min-width:60px;}
   .bar-fill{height:100%;background:var(--pink);}
   .bar-fill.hi{background:var(--ink);}
-  .pct{font-family:'JetBrains Mono',monospace;font-size:12.5px;min-width:38px;text-align:right;}
-  .cat-badge{font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 6px;background:var(--paper-dim);color:var(--pink-deep);border-radius:2px;text-transform:uppercase;}
-  .house-select-filter{margin-bottom:14px;}
+  .pct{font-family:var(--mono);font-size:12.5px;min-width:38px;text-align:right;}
+  .cat-badge{font-family:var(--mono);font-size:10px;padding:2px 6px;background:var(--paper-dim);color:var(--pink-deep);border-radius:2px;text-transform:uppercase;white-space:nowrap;}
+  .house-select-filter{margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
   .house-select-filter select{padding:7px 10px;font-size:12.5px;border:1px solid var(--line);border-radius:2px;background:var(--white);}
+  .house-select-filter label{font-size:11px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+  .hex-swatch{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:middle;margin-right:6px;border:1px solid rgba(0,0,0,.08);}
+  .sub-title{font-family:var(--serif);font-size:16px;font-weight:600;margin:22px 0 4px;}
+  .sub-meta{font-size:11.5px;color:var(--muted);font-family:var(--mono);margin-bottom:10px;}
 
-  .export-row{display:flex;gap:10px;margin-top:18px;}
-  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px;font-family:'JetBrains Mono',monospace;}
+  .export-row{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap;}
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px;font-family:var(--mono);}
 
   .donut-panel{display:flex;gap:28px;align-items:center;flex-wrap:wrap;background:var(--white);border:1px solid var(--line);padding:20px;margin-bottom:16px;}
   .donut-panel h4{font-family:var(--serif);font-size:16px;font-weight:600;margin:0 0 4px;}
-  .donut-meta{font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+  .donut-meta{font-size:11.5px;color:var(--muted);font-family:var(--mono);margin-bottom:10px;}
   .legend{display:flex;flex-direction:column;gap:6px;min-width:180px;}
   .legend-row{display:flex;align-items:center;gap:8px;font-size:12.5px;}
   .swatch{width:12px;height:12px;border-radius:2px;flex-shrink:0;}
   .legend-name{flex:1;text-transform:capitalize;}
-  .legend-pct{font-family:'JetBrains Mono',monospace;color:var(--muted);}
+  .legend-pct{font-family:var(--mono);color:var(--muted);}
   .house-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
   .house-grid .donut-panel{flex-direction:column;align-items:flex-start;margin-bottom:0;}
   .house-grid .legend{min-width:0;width:100%;}
@@ -170,24 +203,13 @@
     .add-house{flex-direction:column;align-items:stretch;}
     .field input[type=text]{min-width:0;width:100%;}
     .mini-head{display:none;}
-    .garment-row{
-      grid-template-columns:1fr 1fr;
-      grid-template-areas:
-        "piece piece"
-        "type type"
-        "fit treat"
-        "colour colour"
-        "details details"
-        "remove remove";
-      gap:6px;padding:10px;border:1px solid var(--line);border-radius:2px;margin-bottom:10px;background:var(--white);
-    }
-    .garment-row .g-piece{grid-area:piece;}
-    .garment-row .g-type{grid-area:type;}
-    .garment-row .g-fit{grid-area:fit;}
-    .garment-row .g-treat{grid-area:treat;}
-    .garment-row .g-colour{grid-area:colour;}
-    .garment-row .g-details{grid-area:details;}
-    .garment-row .g-remove{grid-area:remove;justify-self:end;}
+    .look-meta{grid-template-columns:1fr 1fr;}
+    .look-meta .lm-formula{grid-column:1 / -1;}
+    .g-line.l1{grid-template-columns:1fr 1fr;}
+    .g-line.l1 .g-remove{grid-column:2;justify-self:end;}
+    .g-line.l2{grid-template-columns:1fr 1fr 34px;}
+    .g-line.l2 .g-pattern{grid-column:1 / -1;}
+    .g-line.l2 .g-notes{grid-column:1 / -1;}
     .acc-row{grid-template-columns:1fr;gap:6px;padding:8px;border:1px solid var(--line);border-radius:2px;margin-bottom:8px;background:var(--white);}
     .acc-row .a-remove{justify-self:end;}
     .foot-row{grid-template-columns:1fr;gap:6px;}
@@ -213,13 +235,26 @@
     <div class="season-row">
       <label>SEASON</label>
       <input type="text" id="seasonInput" placeholder="e.g. Menswear SS27" value="">
-      <span id="saveIndicator" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-left:8px;"></span>
+      <span id="saveIndicator" class="meta-note" style="margin-left:8px;"></span>
     </div>
-    <div class="season-row" style="margin-top:12px;">
+    <div class="season-row" id="authRow">
+      <label>ACCOUNT</label>
+      <span id="authStatus" class="meta-note">checking sign-in…</span>
+      <button class="btn-ghost btn btn-sm" id="signInBtn" type="button" style="display:none;">Sign in with Google</button>
+      <button class="btn-ghost btn btn-sm" id="signOutBtn" type="button" style="display:none;">Sign out</button>
+    </div>
+    <div class="season-row">
       <label>API KEY</label>
       <input type="password" id="apiKeyInput" placeholder="sk-ant-..." style="font-family:'JetBrains Mono',monospace;font-size:13px;min-width:280px;">
       <button class="btn-ghost btn btn-sm" id="saveKeyBtn" type="button">Save key</button>
-      <span id="keyStatus" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);"></span>
+      <span id="keyStatus" class="meta-note"></span>
+    </div>
+    <div class="season-row">
+      <label>MODEL</label>
+      <select id="modelSelect">
+        <option value="claude-opus-5-5">Claude Opus 5.5: most accurate</option>
+        <option value="claude-sonnet-5-5">Claude Sonnet 5.5: about half the cost</option>
+      </select>
     </div>
   </header>
 
@@ -244,6 +279,7 @@
   <div id="queueContainer" style="margin-top:16px;"></div>
 
   <div class="section-title"><span class="num">02</span><h2>Review &amp; correct</h2><div class="line"></div></div>
+  <div class="section-intro">Use <strong>exclude from report</strong> on a house that didn't load properly. It stays here, so you can fix or re-tag it, but it's left out of every number, chart and export until you include it again.</div>
   <div id="housesContainer"></div>
 
   <div class="section-title"><span class="num">03</span><h2>Trend report</h2><div class="line"></div></div>
@@ -251,6 +287,7 @@
     <button class="tab active" data-tab="season">By season</button>
     <button class="tab" data-tab="house">By house</button>
   </div>
+  <div id="reportFilter" class="cat-filter"></div>
   <div id="reportContainer"></div>
 
   <div class="section-title"><span class="num">04</span><h2>Colour breakdown</h2><div class="line"></div></div>
@@ -258,7 +295,18 @@
     <button class="tab active" data-ctab="total">Total (season)</button>
     <button class="tab" data-ctab="house">By house</button>
   </div>
+  <div class="house-select-filter">
+    <label>Count by</label>
+    <select id="colourModeSelect">
+      <option value="looks">Dominant colour per look (sums to 100% of looks)</option>
+      <option value="garments">Every garment</option>
+    </select>
+  </div>
   <div id="colourContainer"></div>
+
+  <div class="section-title"><span class="num">05</span><h2>What does it sit on?</h2><div class="line"></div></div>
+  <div class="section-intro">Pick a fabric, detail or colour to see which pieces it shows up on. <strong>Index</strong> compares that with the season's overall mix. 100 = the same as the season mix, 200 = twice as likely. For example, "silk satin → slip dress, index 320" means silk satin appears on slip dresses 3.2× more than you'd expect.</div>
+  <div id="overIndexContainer"></div>
 
   <div class="export-row">
     <button class="btn-ghost btn" id="exportExcel">Export full Excel (all tabs)</button>
@@ -276,6 +324,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-auth-compat.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-compat.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" crossorigin="anonymous"></script>
 <script>
@@ -288,6 +337,11 @@ window.addEventListener("error", function(e){
   }
 });
 
+function showBanner(text){
+  const banner = document.getElementById("errorBanner");
+  if(banner){ banner.style.display = "block"; banner.textContent = text; }
+}
+
 const firebaseConfig = {
   apiKey: "AIzaSyBtZ7UFhoTB_movaKWGlcxuE-2TATb5q0w",
   authDomain: "trends-tagger-3266d.firebaseapp.com",
@@ -298,94 +352,244 @@ const firebaseConfig = {
   measurementId: "G-DX6HCLZM40"
 };
 
-let firebaseReady = false;
+// Firestore layout:
+//   trend-tagger/state            -> { json: {season, houses, schemaVersion} }
+//   trend-tagger-houses/{houseId} -> { json: [looks of that house] }
+//   trend-tagger/apikey           -> { key }
+// Looks live in one doc per house so a full season never hits Firestore's 1 MB per-document limit.
 let stateDocRef = null;
+let housesColl = null;
 let db = null;
+let auth = null;
 try{
   firebase.initializeApp(firebaseConfig);
   db = firebase.firestore();
   db.settings({ experimentalForceLongPolling: true });
   stateDocRef = db.collection("trend-tagger").doc("state");
-  firebaseReady = true;
+  housesColl = db.collection("trend-tagger-houses");
+  if(typeof firebase.auth === "function") auth = firebase.auth();
 }catch(initErr){
   console.error("Firebase init failed:", initErr);
-  const banner = document.getElementById("errorBanner");
-  if(banner){
-    banner.style.display = "block";
-    banner.textContent = "Firebase failed to initialise: " + initErr.message + " — the Firebase library may not have loaded. Check your connection and reload.";
-  }
+  showBanner("Firebase failed to initialise: " + initErr.message + " — the Firebase library may not have loaded. Check your connection and reload.");
 }
 
 // ---------- controlled vocabulary ----------
-const TROUSER_TYPES = ["straight","wide-leg","tapered","skinny","cropped","capri","balloon","cargo","palazzo","bootcut","flare","jogger","pleated-front","other"];
-const FIT_TYPES = ["oversized","fitted","cropped","relaxed","tailored-slim"];
-const FABRIC_TREATMENTS = ["sheer","matte","textured","glossy","opaque"];
-const PIECE_TYPES = ["outerwear","top","trouser","skirt","dress","knitwear"];
-const ACCESSORY_TYPES = ["bag","sunglasses","jewelry","hat","scarf","tie","belt","gloves","other"];
-const FOOTWEAR_TYPES = ["sneaker","loafer","boot","sandal","heel","flat","oxford-derby","slide","other"];
+const PIECE_TYPES = ["coat","jacket","top","knitwear","dress","skirt","trouser","shorts","jumpsuit"];
+// "outerwear" was the single coat/jacket bucket in v1; kept so older looks still display.
+const LEGACY_PIECES = ["outerwear"];
+
+const TROUSER_TYPES = ["straight","wide-leg","tapered","skinny","cropped","capri","balloon","cargo","palazzo","bootcut","flare","jogger","pleated-front","cigarette","barrel","low-rise","other"];
+const TYPES_BY_PIECE = {
+  coat: ["trench","overcoat","cocoon coat","car coat","wrap coat","cape","opera coat","duster","puffer","parka","peacoat","shearling coat","coat dress","other"],
+  jacket: ["single-breasted blazer","double-breasted blazer","shrunken jacket","cropped jacket","boxy jacket","tuxedo jacket","peplum jacket","bomber","biker jacket","denim jacket","field/utility jacket","shirt jacket","chore jacket","bolero","waistcoat","other"],
+  top: ["shirt","blouse","t-shirt","tank","camisole","halter top","corset/bustier","bodysuit","tunic","crop top","polo","bandeau","other"],
+  knitwear: ["crewneck jumper","v-neck jumper","turtleneck","cardigan","knit polo","knit vest","knit top","twinset","knit dress","other"],
+  dress: ["slip dress","column dress","sheath dress","shirt dress","wrap dress","a-line dress","fit-and-flare dress","bias-cut gown","ball gown","mermaid gown","babydoll dress","shift dress","tunic dress","corset dress","drop-waist dress","bubble dress","halter dress","draped dress","tiered dress","other"],
+  skirt: ["pencil skirt","a-line skirt","full/circle skirt","pleated skirt","bubble/puffball skirt","tiered/ruffled skirt","wrap skirt","slip/bias skirt","tulle skirt","balloon skirt","sarong","kilt","other"],
+  trouser: TROUSER_TYPES,
+  shorts: ["tailored shorts","bermuda","hot pants","bloomers","cycling shorts","boxer shorts","other"],
+  jumpsuit: ["jumpsuit","playsuit","boilersuit","other"]
+};
+const ALL_GARMENT_TYPES = Array.from(new Set(Object.values(TYPES_BY_PIECE).flat()));
+
+const LENGTHS = ["mini","above-knee","knee","midi","maxi","floor","cropped","waist","hip","full-length","n/a"];
+const FIT_TYPES = ["oversized","fitted","cropped","relaxed","tailored-slim","straight","body-con","structured","draped","voluminous"];
+const FABRIC_TREATMENTS = ["sheer","matte","textured","glossy","opaque","metallic","crinkled/plissé"];
+
+// Every material belongs to one family, so the report can roll up (e.g. all silks) or drill down (silk satin vs crepe de chine).
+const MATERIAL_GROUPS = {
+  "sheer & airy": ["chiffon","georgette","organza","tulle","mesh","voile","lace"],
+  "silk & satin": ["silk satin","duchess satin","silk crepe de chine","silk twill","silk (unspecified)"],
+  "evening & structured": ["taffeta","velvet","brocade/jacquard","cloqué","moiré","lamé","sequin fabric"],
+  "tailoring wool": ["wool suiting","wool gabardine","wool flannel","wool crepe","tweed","bouclé","mohair","felt/boiled wool","wool (unspecified)"],
+  "knit & jersey": ["fine-gauge knit","chunky knit","cashmere knit","rib knit","jersey","crochet"],
+  "cotton & linen": ["cotton poplin","cotton twill/drill","denim","linen","canvas","seersucker","broderie anglaise","cotton (unspecified)"],
+  "leather & skins": ["leather","patent leather","suede","croc/embossed leather","shearling","fur","faux fur","feathers"],
+  "technical & novelty": ["nylon/technical","neoprene/scuba","pvc/vinyl","latex","raffia/straw"],
+  "other": ["other"]
+};
+const MATERIALS = Object.values(MATERIAL_GROUPS).flat();
+const MATERIAL_TO_GROUP = {};
+Object.entries(MATERIAL_GROUPS).forEach(([g,list])=> list.forEach(m=> MATERIAL_TO_GROUP[m] = g));
+function materialGroupOf(m){ return m ? (MATERIAL_TO_GROUP[m] || "other") : ""; }
+
+const DETAIL_TYPES = [
+  "embroidery","beading","sequins/paillettes","crystals","appliqué","3d flowers/rosettes","feathers","fringe","tassels","fur trim","lace trim",
+  "ruffles","bows","pleats","draping","ruching/gathering","smocking","tiers","peplum","bubble hem","asymmetric hem","train","slit","cut-outs","sheer panels",
+  "cummerbund/sash","corsetry/boning","belted waist","lacing","wrap/tie","oversized buttons","studs/hardware","quilting","patchwork","piping","cargo pockets",
+  "raw edges/distressing","trompe l'oeil","cape/capelet","puff sleeves","exaggerated shoulders","high neck","plunging neckline","off-shoulder","one-shoulder","halter neck","backless"
+];
+const PATTERNS = ["solid","stripe","check/plaid","houndstooth","floral","animal","polka dot","paisley","graphic/abstract","logo/monogram","colour-block","tie-dye/ombré","other print"];
+const LOOK_SILHOUETTES = ["column","a-line","fit-and-flare","hourglass/cinched waist","cocoon/rounded","boxy/oversized","trapeze","mermaid","full volume/ball gown","draped/fluid","sharp-shoulder tailoring","layered","body-con"];
+const ACCESSORY_TYPES = ["bag","sunglasses","jewelry","earrings","necklace","brooch","hat","headpiece","hair accessory","scarf","tie","bow tie","belt","cummerbund","sash","gloves","tights/hosiery","veil","other"];
+const FOOTWEAR_TYPES = ["sneaker","loafer","ballet flat","flat","mule","pump","slingback","kitten heel","heel","platform","sandal","slide","ankle boot","knee boot","thigh-high boot","boot","oxford-derby","other"];
+
+// Colour families: what the donut groups by. Specific shade names + hexes are kept per garment underneath.
+const COLOUR_PALETTE = [
+  {key:"black",   hex:"#141114", match:["black","noir","jet","onyx"]},
+  {key:"white",   hex:"#F4F2EE", match:["white","optic","snow"]},
+  {key:"cream",   hex:"#EDE3CF", match:["cream","ivory","ecru","off-white","bone","vanilla"]},
+  {key:"grey",    hex:"#8C8580", match:["grey","gray","charcoal","slate","dove","ash","taupe"]},
+  {key:"tan",     hex:"#C9A876", match:["tan","camel","beige","sand","khaki","nude","stone","biscuit"]},
+  {key:"brown",   hex:"#6B4A34", match:["brown","chocolate","coffee","espresso","mocha","cognac"]},
+  {key:"navy",    hex:"#1B2A4A", match:["navy","midnight"]},
+  {key:"blue",    hex:"#3E6FA8", match:["blue","denim","cobalt","indigo","azure","sky","teal"]},
+  {key:"green",   hex:"#3F6B4A", match:["green","emerald","forest","sage","mint","jade","pistachio","chartreuse"]},
+  {key:"olive",   hex:"#6B6B3A", match:["olive","army","moss"]},
+  {key:"yellow",  hex:"#D9B34A", match:["yellow","mustard","lemon","ochre"]},
+  {key:"orange",  hex:"#C97A3E", match:["orange","rust","terracotta","copper","tangerine","coral"]},
+  {key:"red",     hex:"#C6362E", match:["red","crimson","scarlet","cherry","tomato"]},
+  {key:"burgundy",hex:"#6E2A34", match:["burgundy","maroon","wine","oxblood","bordeaux"]},
+  {key:"pink",    hex:"#D98FA0", match:["pink","rose","blush","fuchsia","magenta"]},
+  {key:"purple",  hex:"#6E4A78", match:["purple","lilac","lavender","violet","plum","mauve"]},
+  {key:"gold",    hex:"#B8963E", match:["gold","golden","bronze"]},
+  {key:"silver",  hex:"#B9B4AE", match:["silver","metallic","chrome","pewter"]},
+  {key:"multicolour", hex:"#A68FB5", match:["multicolour","multicolor","multi","print","rainbow"]}
+];
+const COLOUR_FAMILIES = COLOUR_PALETTE.map(p=>p.key);
+// DFB counts these as neutrals in captions.
+const NEUTRAL_FAMILIES = ["black","white","cream","grey","tan","brown"];
+const UNSPECIFIED = {key:"unspecified", hex:"#DFD3CD"};
 
 // ---------- state ----------
 let state = { season: "", houses: [], looks: [] };
 let activeTab = "season";
+let reportCategory = "all";
 let saveTimer = null;
+let stateLoaded = false;
+let loadingState = false;
 
 function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,9); }
 
-const API_KEY_STORAGE = "dfb-trend-tagger-api-key";
-let apiKeyDocRef = null;
-
-function getApiKeyLocal(){
-  return localStorage.getItem(API_KEY_STORAGE) || "";
+function esc(v){
+  return String(v == null ? "" : v)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 }
 
-async function initApiKeyField(){
+function keyOf(s){ return String(s||"").toLowerCase().replace(/[\s_\-]+/g," ").trim(); }
+
+function validHex(h){
+  if(!h) return "";
+  let s = String(h).trim();
+  if(!s.startsWith("#")) s = "#" + s;
+  if(/^#[0-9a-fA-F]{3}$/.test(s)) s = "#" + s.slice(1).split("").map(c=>c+c).join("");
+  return /^#[0-9a-fA-F]{6}$/.test(s) ? s.toUpperCase() : "";
+}
+
+// Snap free-text values onto the vocabulary so "Wide leg" and "wide-leg" count as one trend.
+function canonFromList(list, value){
+  const k = keyOf(value);
+  if(!k) return "";
+  const hit = list.find(v=> keyOf(v) === k);
+  return hit || String(value).toLowerCase().trim();
+}
+function canonType(piece, value){
+  const list = (TYPES_BY_PIECE[piece] || []).concat(ALL_GARMENT_TYPES);
+  // v1 short names: "slip" on a dress -> "slip dress", "pleated" on a skirt -> "pleated skirt".
+  const withNoun = value && ["dress","skirt","jacket","coat"].includes(piece) ? list.find(v=> keyOf(v) === keyOf(value + " " + piece)) : null;
+  return withNoun || canonFromList(list, value);
+}
+
+// ---------- auth ----------
+let currentUser = null;
+
+function renderAuth(){
+  const status = document.getElementById("authStatus");
+  const inBtn = document.getElementById("signInBtn");
+  const outBtn = document.getElementById("signOutBtn");
+  if(!auth){
+    status.textContent = "sign-in unavailable (auth library didn't load)";
+    inBtn.style.display = "none"; outBtn.style.display = "none";
+    return;
+  }
+  if(currentUser){
+    status.innerHTML = `signed in as ${esc(currentUser.email || currentUser.displayName || "you")} · uid <span class="uid-code">${esc(currentUser.uid)}</span>`;
+    inBtn.style.display = "none"; outBtn.style.display = "";
+  } else {
+    status.textContent = "not signed in";
+    inBtn.style.display = ""; outBtn.style.display = "none";
+  }
+}
+
+document.getElementById("signInBtn").addEventListener("click", async ()=>{
+  if(!auth) return;
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try{
+    await auth.signInWithPopup(provider);
+  }catch(e){
+    if(e && (e.code === "auth/popup-blocked" || e.code === "auth/operation-not-supported-in-this-environment")){
+      await auth.signInWithRedirect(provider);
+    } else {
+      console.error(e);
+      showBanner("Sign-in failed: " + (e.message || e.code) + (e.code === "auth/unauthorized-domain" ? " (add this site's domain under Firebase → Authentication → Settings → Authorized domains)" : ""));
+    }
+  }
+});
+document.getElementById("signOutBtn").addEventListener("click", ()=>{ if(auth) auth.signOut(); });
+
+// ---------- API key ----------
+const API_KEY_STORAGE = "dfb-trend-tagger-api-key";
+const MODEL_STORAGE = "dfb-trend-tagger-model";
+let apiKeyDocRef = db ? db.collection("trend-tagger").doc("apikey") : null;
+
+function lsGet(k){ try{ return localStorage.getItem(k) || ""; }catch(e){ return ""; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+
+function getApiKeyLocal(){ return lsGet(API_KEY_STORAGE); }
+
+async function syncApiKeyFromCloud(){
   const input = document.getElementById("apiKeyInput");
   const status = document.getElementById("keyStatus");
   const local = getApiKeyLocal();
-  if(local) input.value = local;
-
-  if(stateDocRef){
-    apiKeyDocRef = db.collection("trend-tagger").doc("apikey");
-    try{
-      const snap = await apiKeyDocRef.get();
-      if(snap.exists && snap.data().key){
-        input.value = snap.data().key;
-        localStorage.setItem(API_KEY_STORAGE, snap.data().key);
-        status.textContent = "key synced from cloud \u2713";
-      } else if(local){
-        status.textContent = "key saved on this device";
-      }
-    }catch(e){
-      console.error("key sync load failed", e);
-      if(local) status.textContent = "key saved on this device (cloud sync unavailable)";
+  if(local && !input.value) input.value = local;
+  if(!apiKeyDocRef){ if(local) status.textContent = "key saved on this device"; return; }
+  try{
+    const snap = await apiKeyDocRef.get();
+    if(snap.exists && snap.data().key){
+      input.value = snap.data().key;
+      lsSet(API_KEY_STORAGE, snap.data().key);
+      status.textContent = "key synced from cloud ✓";
+    } else if(local){
+      status.textContent = "key saved on this device";
     }
+  }catch(e){
+    console.error("key sync load failed", e);
+    if(local) status.textContent = "key saved on this device (cloud sync unavailable)";
   }
-
-  document.getElementById("saveKeyBtn").addEventListener("click", async ()=>{
-    const val = input.value.trim();
-    if(!val){ status.textContent = "enter a key first"; status.style.color = "var(--red)"; return; }
-    localStorage.setItem(API_KEY_STORAGE, val);
-    status.textContent = "saving\u2026";
-    status.style.color = "var(--muted)";
-    try{
-      if(apiKeyDocRef){
-        await apiKeyDocRef.set({ key: val, updatedAt: Date.now() });
-        status.textContent = "key saved \u2014 synced to all your devices \u2713";
-      } else {
-        status.textContent = "key saved on this device (cloud sync unavailable)";
-      }
-    }catch(e){
-      console.error(e);
-      status.textContent = "key saved on this device \u2014 cloud sync failed";
-    }
-  });
 }
-initApiKeyField();
+
+document.getElementById("saveKeyBtn").addEventListener("click", async ()=>{
+  const input = document.getElementById("apiKeyInput");
+  const status = document.getElementById("keyStatus");
+  const val = input.value.trim();
+  if(!val){ status.textContent = "enter a key first"; status.style.color = "var(--red)"; return; }
+  lsSet(API_KEY_STORAGE, val);
+  status.textContent = "saving…";
+  status.style.color = "var(--muted)";
+  try{
+    if(apiKeyDocRef){
+      await apiKeyDocRef.set({ key: val, updatedAt: Date.now() });
+      status.textContent = "key saved — synced to all your devices ✓";
+    } else {
+      status.textContent = "key saved on this device (cloud sync unavailable)";
+    }
+  }catch(e){
+    console.error(e);
+    status.textContent = "key saved on this device — cloud sync failed" + (e && e.code === "permission-denied" ? " (sign in first)" : "");
+  }
+});
 
 function getApiKey(){
   return document.getElementById("apiKeyInput").value.trim() || getApiKeyLocal();
 }
 
+const modelSelect = document.getElementById("modelSelect");
+if(lsGet(MODEL_STORAGE)) modelSelect.value = lsGet(MODEL_STORAGE);
+if(!modelSelect.value) modelSelect.value = "claude-opus-5-5";
+modelSelect.addEventListener("change", ()=> lsSet(MODEL_STORAGE, modelSelect.value));
+
+// ---------- persistence ----------
 function setSaveIndicator(text, isError){
   const el = document.getElementById("saveIndicator");
   if(!el) return;
@@ -393,54 +597,202 @@ function setSaveIndicator(text, isError){
   el.style.color = isError ? "var(--red)" : "var(--muted)";
 }
 
+const lastSavedHouseJson = {}; // houseId -> JSON last written to that house's doc
+
 async function saveOnce(){
   if(!stateDocRef) throw new Error("Firebase not initialised — see error banner above.");
-  await stateDocRef.set({ json: JSON.stringify(state), updatedAt: Date.now() });
+  if(!stateLoaded) throw new Error("Cloud data hasn't loaded yet, so saving now could overwrite it.");
+  const houseIds = new Set(state.houses.map(h=>h.id));
+  // House docs first, then the index doc, so the index never points at a house doc that isn't written yet.
+  for(const h of state.houses){
+    const json = JSON.stringify(state.looks.filter(l=>l.houseId===h.id));
+    if(lastSavedHouseJson[h.id] !== json){
+      await housesColl.doc(h.id).set({ json, name: h.name, updatedAt: Date.now() });
+      lastSavedHouseJson[h.id] = json;
+    }
+  }
+  await stateDocRef.set({ json: JSON.stringify({ schemaVersion: 2, season: state.season, houses: state.houses }), updatedAt: Date.now() });
+  for(const id of Object.keys(lastSavedHouseJson)){
+    if(!houseIds.has(id)){
+      await housesColl.doc(id).delete();
+      delete lastSavedHouseJson[id];
+    }
+  }
 }
 
 function scheduleSave(){
   clearTimeout(saveTimer);
-  setSaveIndicator("saving\u2026", false);
+  if(!stateLoaded){
+    setSaveIndicator("not saved yet — cloud data hasn't loaded (sign in?)", true);
+    return;
+  }
+  setSaveIndicator("saving…", false);
   saveTimer = setTimeout(async ()=>{
     try{
       await saveOnce();
-      setSaveIndicator("saved to cloud \u2713", false);
+      setSaveIndicator("saved to cloud ✓", false);
     }catch(e){
       console.error("save failed, retrying once", e);
       try{
         await saveOnce();
-        setSaveIndicator("saved to cloud \u2713", false);
+        setSaveIndicator("saved to cloud ✓", false);
       }catch(e2){
         console.error("retry failed", e2);
-        setSaveIndicator("not saved \u2014 cloud error, keep working, export as backup", true);
+        setSaveIndicator("not saved — " + (e2 && e2.code === "permission-denied" ? "sign in to save" : "cloud error, keep working, export as backup"), true);
       }
     }
   }, 400);
 }
 
+// Anything tagged before the cloud data arrived is merged in instead of being thrown away.
+function mergeLocalInto(loaded, local){
+  local.houses.forEach(lh=>{
+    const localLooks = local.looks.filter(l=>l.houseId===lh.id);
+    let target = loaded.houses.find(h=>h.name.toLowerCase()===lh.name.toLowerCase());
+    if(!target){ target = { ...lh }; loaded.houses.push(target); }
+    localLooks.forEach(l=> loaded.looks.push({ ...l, houseId: target.id }));
+  });
+  return loaded;
+}
+
 async function loadState(){
+  if(loadingState) return;
   if(!stateDocRef){
-    setSaveIndicator("Firebase not initialised \u2014 see error banner above", true);
+    setSaveIndicator("Firebase not initialised — see error banner above", true);
     document.getElementById("seasonInput").value = state.season || "";
     render();
     return;
   }
+  loadingState = true;
+  setSaveIndicator("loading…", false);
   try{
     const snap = await stateDocRef.get();
-    if(snap.exists){
-      const data = snap.data();
-      if(data && data.json){
-        const parsed = JSON.parse(data.json);
-        if(parsed && parsed.houses) state = parsed;
+    let loaded = { season: "", houses: [], looks: [] };
+    let migratedFromV1 = false;
+    if(snap.exists && snap.data() && snap.data().json){
+      const raw = snap.data().json;
+      const parsed = JSON.parse(raw);
+      if(parsed && Array.isArray(parsed.looks)){
+        // v1: everything in one doc. Keep a copy before converting.
+        const backupRef = db.collection("trend-tagger").doc("state-v1-backup");
+        const backup = await backupRef.get();
+        if(!backup.exists) await backupRef.set({ json: raw, savedAt: Date.now() });
+        loaded = { season: parsed.season || "", houses: parsed.houses || [], looks: parsed.looks };
+        migratedFromV1 = true;
+      } else if(parsed && Array.isArray(parsed.houses)){
+        loaded = { season: parsed.season || "", houses: parsed.houses, looks: [] };
+        const docs = await Promise.all(parsed.houses.map(h=> housesColl.doc(h.id).get()));
+        docs.forEach((d,i)=>{
+          const h = parsed.houses[i];
+          if(d.exists && d.data() && d.data().json){
+            const looks = JSON.parse(d.data().json);
+            lastSavedHouseJson[h.id] = d.data().json;
+            looks.forEach(l=> loaded.looks.push({ ...l, houseId: h.id }));
+          }
+        });
       }
     }
-    setSaveIndicator("loaded from cloud \u2713", false);
+    loaded.houses = loaded.houses.map(h=>({ id: h.id, name: h.name, excluded: !!h.excluded }));
+    loaded.looks = loaded.looks.map(l=> normaliseLook(l, l.houseId));
+    const hadLocal = state.houses.length > 0;
+    state = hadLocal ? mergeLocalInto(loaded, state) : loaded;
+    stateLoaded = true;
+    setSaveIndicator("loaded from cloud ✓", false);
+    if(migratedFromV1 || hadLocal) scheduleSave();
   }catch(e){
     console.error(e);
-    setSaveIndicator("couldn't reach cloud storage \u2014 check connection", true);
+    if(e && e.code === "permission-denied"){
+      setSaveIndicator(currentUser ? "this account can't read the data — check the Firestore rules UID" : "sign in to load your data", true);
+    } else {
+      setSaveIndicator("couldn't reach cloud storage — check connection", true);
+    }
+  }finally{
+    loadingState = false;
   }
   document.getElementById("seasonInput").value = state.season || "";
   render();
+}
+
+// ---------- look normalisation (model output, v1 data and imports all go through here) ----------
+function familyFromName(name){
+  const keys = normaliseColour(name);
+  return keys[0] === UNSPECIFIED.key ? "" : keys[0];
+}
+
+function legacyMaterial(fabric){
+  const k = keyOf(fabric);
+  if(!k) return "";
+  const exact = MATERIALS.find(m=> keyOf(m) === k);
+  if(exact) return exact;
+  const rules = [
+    [/chiffon/,"chiffon"],[/georgette/,"georgette"],[/organza/,"organza"],[/tulle/,"tulle"],[/mesh|net/,"mesh"],[/lace/,"lace"],
+    [/duchess/,"duchess satin"],[/crepe de chine/,"silk crepe de chine"],[/satin|charmeuse/,"silk satin"],[/silk/,"silk (unspecified)"],
+    [/taffeta/,"taffeta"],[/velvet|velour/,"velvet"],[/brocade|jacquard/,"brocade/jacquard"],[/cloqu/,"cloqué"],[/moir/,"moiré"],[/lam[eé]|foil/,"lamé"],[/sequin/,"sequin fabric"],
+    [/gabardine/,"wool gabardine"],[/flannel/,"wool flannel"],[/tweed/,"tweed"],[/boucl/,"bouclé"],[/mohair/,"mohair"],[/felt|boiled/,"felt/boiled wool"],[/suiting|tailor/,"wool suiting"],[/crepe/,"wool crepe"],[/wool/,"wool (unspecified)"],
+    [/cashmere/,"cashmere knit"],[/crochet/,"crochet"],[/rib/,"rib knit"],[/chunky/,"chunky knit"],[/knit/,"fine-gauge knit"],[/jersey/,"jersey"],
+    [/denim/,"denim"],[/poplin/,"cotton poplin"],[/twill|drill|chino/,"cotton twill/drill"],[/linen/,"linen"],[/canvas/,"canvas"],[/seersucker/,"seersucker"],[/broderie|eyelet/,"broderie anglaise"],[/cotton/,"cotton (unspecified)"],
+    [/patent/,"patent leather"],[/croc|python|snake|embossed/,"croc/embossed leather"],[/suede/,"suede"],[/shearling/,"shearling"],[/faux fur/,"faux fur"],[/fur/,"fur"],[/feather/,"feathers"],[/leather/,"leather"],
+    [/nylon|technical|tech|poly/,"nylon/technical"],[/neoprene|scuba/,"neoprene/scuba"],[/pvc|vinyl/,"pvc/vinyl"],[/latex|rubber/,"latex"],[/raffia|straw/,"raffia/straw"]
+  ];
+  const hit = rules.find(([re])=> re.test(k));
+  return hit ? hit[1] : "other";
+}
+
+function normaliseGarment(g){
+  g = g || {};
+  const piece = String(g.piece||"").toLowerCase().trim();
+  const legacyFabric = !g.material && g.fabric ? String(g.fabric) : "";
+  const material = g.material ? canonFromList(MATERIALS, g.material) : legacyMaterial(legacyFabric);
+  const colourName = String(g.colourName != null ? g.colourName : (g.colour || "")).trim();
+  const family = g.colourFamily && g.colourFamily !== "unspecified" ? canonFromList(COLOUR_FAMILIES, g.colourFamily) : familyFromName(colourName);
+  let detailNotes = g.detailNotes != null ? String(g.detailNotes) : (typeof g.details === "string" ? g.details : "");
+  if(legacyFabric && material === "other") detailNotes = (detailNotes ? detailNotes + "; " : "") + "fabric: " + legacyFabric;
+  return {
+    piece,
+    type: canonType(piece, g.type),
+    length: g.length === "n/a" ? "" : (g.length || ""),
+    fit: g.fit || "",
+    material,
+    fabricTreatment: g.fabricTreatment || "",
+    colourName,
+    colourFamily: family,
+    hex: validHex(g.hex) || (family ? hexFor(family) : ""),
+    pattern: g.pattern || "",
+    details: Array.isArray(g.details) ? Array.from(new Set(g.details.map(d=>canonFromList(DETAIL_TYPES, d)).filter(Boolean))) : [],
+    detailNotes
+  };
+}
+
+function normaliseLook(raw, houseId){
+  raw = raw || {};
+  const garments = (Array.isArray(raw.garments) ? raw.garments : []).map(normaliseGarment);
+  let dom = raw.dominantColour && typeof raw.dominantColour === "object" ? raw.dominantColour : {
+    name: raw.dominantColourName || "",
+    family: raw.dominantColourFamily || "",
+    hex: raw.dominantHex || ""
+  };
+  if(!dom.name && !dom.family && garments.length){
+    // v1 looks had no dominant colour: fall back to the first garment (usually the outer layer).
+    const g = garments.find(x=>x.colourFamily) || garments[0];
+    dom = { name: g.colourName, family: g.colourFamily, hex: g.hex };
+  }
+  const family = dom.family ? canonFromList(COLOUR_FAMILIES, dom.family) : familyFromName(dom.name);
+  let footwear = raw.footwear && typeof raw.footwear === "object" ? raw.footwear : { type: raw.footwearType || "", colour: raw.footwearColour || "" };
+  if(footwear.type === "not visible") footwear = { type: "", colour: "" };
+  return {
+    id: raw.id || uid("look"),
+    houseId,
+    lookNumber: String(raw.lookNumber || "?"),
+    outfitFormula: String(raw.outfitFormula || "").toLowerCase().trim(),
+    silhouette: raw.silhouette || "",
+    dominantColour: { name: String(dom.name||""), family, hex: validHex(dom.hex) || (family ? hexFor(family) : "") },
+    dominantMaterial: raw.dominantMaterial ? canonFromList(MATERIALS, raw.dominantMaterial) : (garments.find(g=>g.material) || {}).material || "",
+    garments,
+    accessories: (Array.isArray(raw.accessories) ? raw.accessories : []).map(a=>({ type: a.type || "", colour: a.colour || "", detail: a.detail || "" })),
+    footwear: { type: footwear.type || "", colour: footwear.colour || "" },
+    coordSet: !!raw.coordSet,
+    notes: raw.notes || ""
+  };
 }
 
 // ---------- vision tagging ----------
@@ -453,84 +805,154 @@ function fileToBase64(file){
   });
 }
 
-function buildPrompt(){
-  return `You are a fashion runway tagging assistant. The image shows one or more runway looks. It may be:
-(a) a small contact sheet with visible numbers (e.g. 01, 02, 03), or
-(b) a dense grid of many thumbnail photos with NO visible numbers (e.g. 9, 12, 15+ looks arranged in rows and columns, sometimes on a dark or plain background).
-
-Identify and tag EVERY distinct look/model shown in the image — there is no limit on how many. If numbers are visible, use them. If not, assign lookNumber sequentially in reading order (left to right, top to bottom), zero-padded to two digits starting at 01. Do not skip or merge looks, and do not stop early on a large grid — tag all of them, even if that means many entries in the array.
-
-For EACH look, extract structured tags using ONLY the controlled vocabulary below where indicated. Respond with ONLY a minified JSON array, no markdown, no code fences, no prose before or after — just the array.
-
-Controlled vocabulary:
-- garment.piece: one of ${JSON.stringify(PIECE_TYPES)}
-- trouser garment.type (only when piece is "trouser"): one of ${JSON.stringify(TROUSER_TYPES)}
-- outerwear/top/skirt/dress/knitwear garment.type: short free-text label (e.g. "double-breasted blazer","dress shirt","trench coat")
-- garment.fit: one of ${JSON.stringify(FIT_TYPES)}
-- garment.fabricTreatment: one of ${JSON.stringify(FABRIC_TREATMENTS)}
-- accessory.type: one of ${JSON.stringify(ACCESSORY_TYPES)}
-- footwear.type: one of ${JSON.stringify(FOOTWEAR_TYPES)}
-
-JSON shape per look (omit any garment/accessory/footwear that is not visible — never invent items). Keep colour and details SHORT (a few words max) since many looks may be in one image and space is limited:
-{"lookNumber":"01","garments":[{"piece":"trouser","type":"wide-leg","fit":"straight","fabric":"wool","fabricTreatment":"sheer","colour":"grey","details":"short note"}],"accessories":[{"type":"tie","detail":"short note"}],"footwear":{"type":"sneaker","colour":"grey"},"coordSet":false,"notes":""}
-
-Output the array only, containing one object per look visible in the image.`;
+function buildSchema(){
+  const str = { type: "string" };
+  const en = (list)=> ({ type: "string", enum: list });
+  const obj = (props)=> ({ type: "object", additionalProperties: false, required: Object.keys(props), properties: props });
+  const garment = obj({
+    piece: en(PIECE_TYPES),
+    type: en(ALL_GARMENT_TYPES),
+    length: en(LENGTHS),
+    fit: en(FIT_TYPES),
+    material: en(MATERIALS),
+    fabricTreatment: en(FABRIC_TREATMENTS),
+    colourName: str,
+    colourFamily: en(COLOUR_FAMILIES),
+    hex: str,
+    pattern: en(PATTERNS),
+    details: { type: "array", items: en(DETAIL_TYPES) },
+    detailNotes: str
+  });
+  const accessory = obj({ type: en(ACCESSORY_TYPES), colour: str, detail: str });
+  const look = obj({
+    lookNumber: str,
+    outfitFormula: str,
+    silhouette: en(LOOK_SILHOUETTES),
+    dominantColourName: str,
+    dominantColourFamily: en(COLOUR_FAMILIES),
+    dominantHex: str,
+    dominantMaterial: en(MATERIALS),
+    garments: { type: "array", items: garment },
+    accessories: { type: "array", items: accessory },
+    footwearType: en(FOOTWEAR_TYPES.concat(["not visible"])),
+    footwearColour: str,
+    coordSet: { type: "boolean" },
+    notes: str
+  });
+  return obj({ looks: { type: "array", items: look } });
 }
 
-async function tagImageFile(file, houseId){
+function buildPrompt(){
+  const typeGuide = Object.entries(TYPES_BY_PIECE).map(([p,list])=>`  - ${p}: ${list.join(", ")}`).join("\n");
+  return `You are a runway tagging assistant for a fashion data newsletter. The analysis is quantitative, so specific, consistent tags matter more than prose.
+
+The image shows one or more runway looks. It may be:
+(a) a small contact sheet with visible numbers (e.g. 01, 02, 03), or
+(b) a dense grid of many thumbnails with NO visible numbers (9, 12, 15+ looks in rows and columns, sometimes on a dark or plain background).
+
+Tag EVERY distinct look/model in the image. There is no limit. If numbers are visible, use them. If not, number looks in reading order (left to right, top to bottom), zero-padded from 01. Don't skip or merge looks, and don't stop early on a large grid.
+
+Per look:
+- outfitFormula: the outfit as a short formula, the way a fashion editor would say it, lowercase, e.g. "double-breasted blazer + mini skirt", "slip dress + cardigan", "velvet jacket + bow + pencil skirt".
+- silhouette: the overall shape of the whole look.
+- dominantColourName / dominantColourFamily / dominantHex: the ONE colour that covers most of the look.
+- dominantMaterial: the fabric that covers most of the look.
+
+Per garment (one entry per visible piece, outer layer first; never invent hidden pieces):
+- piece + type: pick the type that belongs to the piece:
+${typeGuide}
+- length: where the hem falls (mini/above-knee/knee/midi/maxi/floor for skirts, dresses, coats; cropped/waist/hip for tops and jackets; full-length or cropped for trousers). Use n/a only when it can't be seen.
+- material: be as specific as the image allows. Tell chiffon from organza from tulle (chiffon is soft and fluid, organza is crisp and holds its shape, tulle is a net), and taffeta from duchess satin. Use "silk (unspecified)", "wool (unspecified)" or "cotton (unspecified)" only when you can see the fibre family but not the weave.
+- fabricTreatment: the finish (sheer, matte, glossy, metallic...).
+- colourName: a specific shade name, as a colour editor would write it ("butter yellow", "oxblood", "powder blue", "chocolate brown", "ecru", "chartreuse", "dove grey"), not just "yellow".
+- colourFamily: the family that shade belongs to. Use "multicolour" only for prints with no dominant colour.
+- hex: your best estimate of the shade as it appears in the photo, as #RRGGBB.
+- pattern: "solid" unless there is a print or weave pattern.
+- details: every construction or embellishment detail you can see, e.g. embroidery, beading, ruffles, bows, draping, cut-outs, a cummerbund or sash at the waist, corsetry, feathers, fringe. Use an empty array if there are none.
+- detailNotes: a few words for anything the lists don't capture (e.g. "jet beaded collar", "cummerbund in contrast satin"). Empty string if nothing to add.
+
+Accessories: every visible accessory. A cummerbund worn as a separate piece is an accessory of type "cummerbund". Footwear: "not visible" if cropped out.
+coordSet: true when jacket and trouser/skirt are clearly a matching set.
+
+Keep free-text fields short, because a dense grid needs room for every look.`;
+}
+
+// Streams the response so long, dense grids don't hit request timeouts. Returns the concatenated text.
+async function callClaude(body, onProgress){
   const apiKey = getApiKey();
-  if(!apiKey){
-    throw new Error("No API key saved \u2014 paste your Anthropic API key at the top and click Save key.");
-  }
-  const base64 = await fileToBase64(file);
-  const mediaType = file.type || "image/jpeg";
+  if(!apiKey) throw new Error("No API key saved — paste your Anthropic API key at the top and click Save key.");
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "x-api-key": apiKey,
       "anthropic-version": "2023-06-01",
+      "anthropic-beta": "server-side-fallback-2026-07-01",
       "anthropic-dangerous-direct-browser-access": "true"
     },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-6",
-      max_tokens: 4096,
-      messages: [{
-        role: "user",
-        content: [
-          { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } },
-          { type: "text", text: buildPrompt() }
-        ]
-      }]
-    })
+    body: JSON.stringify({ ...body, stream: true })
   });
   if(!response.ok){
     const errBody = await response.text();
     throw new Error(`API error ${response.status}: ${errBody.slice(0,200)}`);
   }
-  const data = await response.json();
-  const textBlocks = (data.content || []).filter(b=>b.type==="text").map(b=>b.text).join("\n");
-  let cleaned = textBlocks.trim().replace(/^```json/i,"").replace(/^```/,"").replace(/```$/,"").trim();
-  let arr;
-  try{ arr = JSON.parse(cleaned); }
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "", text = "", stopReason = null;
+  const blockTypes = {};
+  const handle = (evt)=>{
+    if(evt.type === "content_block_start") blockTypes[evt.index] = evt.content_block && evt.content_block.type;
+    else if(evt.type === "content_block_delta" && evt.delta && evt.delta.type === "text_delta" && blockTypes[evt.index] === "text"){
+      text += evt.delta.text;
+      if(onProgress) onProgress(text.length);
+    }
+    else if(evt.type === "message_delta" && evt.delta && evt.delta.stop_reason) stopReason = evt.delta.stop_reason;
+    else if(evt.type === "error") throw new Error("API stream error: " + ((evt.error && evt.error.message) || "unknown"));
+  };
+  while(true){
+    const { done, value } = await reader.read();
+    if(done) break;
+    buffer += decoder.decode(value, { stream: true });
+    let idx;
+    while((idx = buffer.indexOf("\n\n")) !== -1){
+      const chunk = buffer.slice(0, idx);
+      buffer = buffer.slice(idx + 2);
+      const data = chunk.split("\n").filter(l=>l.startsWith("data:")).map(l=>l.slice(5).trim()).join("");
+      if(data) handle(JSON.parse(data));
+    }
+  }
+  return { text, stopReason };
+}
+
+async function tagImageFile(file, houseId, onProgress){
+  const base64 = await fileToBase64(file);
+  const mediaType = file.type || "image/jpeg";
+  const { text, stopReason } = await callClaude({
+    model: modelSelect.value || "claude-opus-5-5",
+    // Thinking tokens count toward this too, and every look now carries far more fields than v1.
+    // Never lower it: a truncated response is unparseable.
+    max_tokens: 32000,
+    fallbacks: "default",
+    output_config: { effort: "medium", format: { type: "json_schema", schema: buildSchema() } },
+    messages: [{
+      role: "user",
+      content: [
+        { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } },
+        { type: "text", text: buildPrompt() }
+      ]
+    }]
+  }, onProgress);
+  if(stopReason === "refusal") throw new Error("The model declined to tag " + file.name + ". Try again, or try the other model.");
+  if(stopReason === "max_tokens") throw new Error("Response for " + file.name + " was cut off (too many looks in one image). Split the image in two and retry.");
+  let parsed;
+  try{ parsed = JSON.parse(text.trim()); }
   catch(e){
-    console.error("parse failed for", file.name, "raw response:", cleaned);
+    console.error("parse failed for", file.name, "raw response:", text);
     throw new Error("Couldn't parse tags from " + file.name + " — model response wasn't valid JSON.");
   }
-  if(!Array.isArray(arr)) arr = [arr];
-  if(!arr.length){
-    throw new Error("No looks detected in " + file.name + " — try a clearer image.");
-  }
-  return arr.map(look=>({
-    id: uid("look"),
-    houseId,
-    lookNumber: look.lookNumber || "?",
-    garments: Array.isArray(look.garments) ? look.garments : [],
-    accessories: Array.isArray(look.accessories) ? look.accessories : [],
-    footwear: look.footwear || {},
-    coordSet: !!look.coordSet,
-    notes: look.notes || ""
-  }));
+  const arr = Array.isArray(parsed) ? parsed : (parsed && Array.isArray(parsed.looks) ? parsed.looks : []);
+  if(!arr.length) throw new Error("No looks detected in " + file.name + " — try a clearer image.");
+  return arr.map(look=> normaliseLook(look, houseId));
 }
 
 // ---------- UI: add house / tag ----------
@@ -565,29 +987,46 @@ document.getElementById("tagBtn").addEventListener("click", ()=>{
 
 // ---------- tagging queue: process houses one after another without blocking the form ----------
 const taggingQueue = [];
+const jobsById = {};
 let queueRunning = false;
 
 function enqueueHouseJob(houseName, files){
   const jobId = uid("job");
-  taggingQueue.push({ jobId, houseName, files });
-  renderQueueJobCard(jobId, houseName, files.length, "queued");
+  const job = { jobId, houseName, files, failed: [] };
+  jobsById[jobId] = job;
+  taggingQueue.push(job);
+  renderQueueJobCard(jobId, houseName, "queued");
   if(!queueRunning) processQueue();
 }
 
-function renderQueueJobCard(jobId, houseName, fileCount, status){
+function renderQueueJobCard(jobId, houseName, status){
   const container = document.getElementById("queueContainer");
   const card = document.createElement("div");
   card.id = jobId;
   card.className = "panel";
   card.style.marginBottom = "10px";
   card.style.padding = "12px 16px";
-  card.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;">
-    <strong style="font-family:var(--serif);font-size:15px;">${houseName}</strong>
-    <span class="job-status" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);">${status}</span>
+  card.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+    <strong style="font-family:var(--serif);font-size:15px;">${esc(houseName)}</strong>
+    <span style="display:flex;gap:10px;align-items:center;">
+      <button class="btn-ghost btn btn-sm job-retry" style="display:none;">Retry failed images</button>
+      <span class="job-status" style="font-family:var(--mono);font-size:11.5px;color:var(--muted);">${esc(status)}</span>
+    </span>
   </div>
-  <div class="job-log" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);margin-top:6px;"></div>`;
+  <div class="job-log" style="font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:6px;"></div>`;
   container.prepend(card);
 }
+
+document.getElementById("queueContainer").addEventListener("click", (e)=>{
+  const btn = e.target.closest(".job-retry");
+  if(!btn) return;
+  const card = btn.closest(".panel");
+  const job = jobsById[card.id];
+  if(!job || !job.failed.length) return;
+  btn.style.display = "none";
+  enqueueHouseJob(job.houseName, job.failed.slice());
+  job.failed = [];
+});
 
 function updateJobStatus(jobId, status, isError){
   const card = document.getElementById(jobId);
@@ -597,12 +1036,13 @@ function updateJobStatus(jobId, status, isError){
   el.style.color = isError ? "var(--red)" : "var(--muted)";
 }
 
-function appendJobLog(jobId, line){
+function appendJobLog(jobId, text, isError){
   const card = document.getElementById(jobId);
   if(!card) return;
   const log = card.querySelector(".job-log");
   const div = document.createElement("div");
-  div.innerHTML = line;
+  div.textContent = text;
+  if(isError) div.style.color = "var(--red)";
   log.appendChild(div);
 }
 
@@ -610,32 +1050,36 @@ async function processQueue(){
   queueRunning = true;
   while(taggingQueue.length){
     const job = taggingQueue.shift();
-    updateJobStatus(job.jobId, "processing\u2026");
+    updateJobStatus(job.jobId, "processing…");
 
     let house = state.houses.find(h=>h.name.toLowerCase()===job.houseName.toLowerCase());
-    if(!house){ house = { id: uid("house"), name: job.houseName }; state.houses.push(house); }
+    if(!house){ house = { id: uid("house"), name: job.houseName, excluded: false }; state.houses.push(house); }
     openHouses.add(house.id);
 
     let addedCount = 0;
-    let failCount = 0;
-
     for(let i=0;i<job.files.length;i++){
-      updateJobStatus(job.jobId, `tagging image ${i+1} of ${job.files.length}\u2026`);
+      const label = `tagging image ${i+1} of ${job.files.length}…`;
+      updateJobStatus(job.jobId, label);
       try{
-        const looks = await tagImageFile(job.files[i], house.id);
+        const looks = await tagImageFile(job.files[i], house.id, (n)=> updateJobStatus(job.jobId, `${label} receiving (${Math.round(n/1000)}k chars)`));
         state.looks.push(...looks);
         addedCount += looks.length;
-        appendJobLog(job.jobId, `Image ${i+1}: added ${looks.length} look(s).`);
+        appendJobLog(job.jobId, `Image ${i+1} (${job.files[i].name}): added ${looks.length} look(s).`);
         render();
         scheduleSave();
       }catch(err){
         console.error(err);
-        failCount++;
-        appendJobLog(job.jobId, `<span style="color:var(--red)">Image ${i+1} failed: ${err.message}</span>`);
+        job.failed.push(job.files[i]);
+        appendJobLog(job.jobId, `Image ${i+1} (${job.files[i].name}) failed: ${err.message}`, true);
       }
     }
 
-    updateJobStatus(job.jobId, `done \u2014 ${addedCount} look(s)${failCount ? ", " + failCount + " failed" : ""}`, failCount>0);
+    const failCount = job.failed.length;
+    updateJobStatus(job.jobId, `done — ${addedCount} look(s)${failCount ? ", " + failCount + " failed" : ""}`, failCount>0);
+    if(failCount){
+      const card = document.getElementById(job.jobId);
+      if(card) card.querySelector(".job-retry").style.display = "";
+    }
     render();
   }
   queueRunning = false;
@@ -644,46 +1088,89 @@ async function processQueue(){
 // ---------- render: houses & looks ----------
 const openHouses = new Set();
 
+// Always starts with a blank option, and keeps a value that isn't in the list,
+// so the dropdown never displays a tag that isn't actually stored.
 function optionsHtml(list, selected){
-  return list.map(v=>`<option value="${v}" ${v===selected?"selected":""}>${v}</option>`).join("");
+  const sel = selected || "";
+  const opts = ["<option value=\"\">—</option>"];
+  if(sel && !list.includes(sel)) opts.push(`<option value="${esc(sel)}" selected>${esc(sel)} (old tag)</option>`);
+  list.forEach(v=> opts.push(`<option value="${esc(v)}" ${v===sel?"selected":""}>${esc(v)}</option>`));
+  return opts.join("");
 }
 
-function garmentRowHtml(lookId, gIdx, g){
+function groupedMaterialOptions(selected){
+  const sel = selected || "";
+  let html = "<option value=\"\">—</option>";
+  if(sel && !MATERIALS.includes(sel)) html += `<option value="${esc(sel)}" selected>${esc(sel)} (old tag)</option>`;
+  Object.entries(MATERIAL_GROUPS).forEach(([g,list])=>{
+    html += `<optgroup label="${esc(g)}">` + list.map(m=>`<option value="${esc(m)}" ${m===sel?"selected":""}>${esc(m)}</option>`).join("") + "</optgroup>";
+  });
+  return html;
+}
+
+function garmentRowHtml(g, gIdx){
+  const typeList = TYPES_BY_PIECE[g.piece] || ALL_GARMENT_TYPES;
+  const chips = (g.details||[]).map((d,i)=>`<span class="chip">${esc(d)}<button class="d-remove" data-didx="${i}" title="remove">✕</button></span>`).join("");
+  const remaining = DETAIL_TYPES.filter(d=> !(g.details||[]).includes(d));
   return `
-  <div class="garment-row" data-look="${lookId}" data-gidx="${gIdx}">
-    <select class="g-piece">${optionsHtml(PIECE_TYPES, g.piece||"")}</select>
-    <input class="g-type" type="text" value="${(g.type||"").replace(/"/g,'&quot;')}" placeholder="type">
-    <select class="g-fit">${optionsHtml(FIT_TYPES, g.fit||"")}</select>
-    <select class="g-treat">${optionsHtml(FABRIC_TREATMENTS, g.fabricTreatment||"")}</select>
-    <input class="g-colour" type="text" value="${(g.colour||"").replace(/"/g,'&quot;')}" placeholder="colour">
-    <input class="g-details" type="text" value="${(g.details||"").replace(/"/g,'&quot;')}" placeholder="details">
-    <button class="icon-btn g-remove" title="remove">✕</button>
+  <div class="garment-row" data-gidx="${gIdx}">
+    <div class="g-line l1">
+      <select data-gf="piece" title="piece">${optionsHtml(PIECE_TYPES.concat(LEGACY_PIECES.filter(p=>p===g.piece)), g.piece)}</select>
+      <select data-gf="type" title="type">${optionsHtml(typeList, g.type)}</select>
+      <select data-gf="length" title="length">${optionsHtml(LENGTHS.filter(l=>l!=="n/a"), g.length)}</select>
+      <select data-gf="fit" title="fit">${optionsHtml(FIT_TYPES, g.fit)}</select>
+      <select data-gf="material" title="material">${groupedMaterialOptions(g.material)}</select>
+      <select data-gf="fabricTreatment" title="finish">${optionsHtml(FABRIC_TREATMENTS, g.fabricTreatment)}</select>
+      <button class="icon-btn danger g-remove" title="remove garment">✕</button>
+    </div>
+    <div class="g-line l2">
+      <input data-gf="colourName" type="text" value="${esc(g.colourName)}" placeholder="shade, e.g. butter yellow">
+      <select data-gf="colourFamily" title="colour family">${optionsHtml(COLOUR_FAMILIES, g.colourFamily)}</select>
+      <input data-gf="hex" type="color" value="${esc(g.hex || "#DFD3CD")}" title="hex ${esc(g.hex)}">
+      <select data-gf="pattern" class="g-pattern" title="pattern">${optionsHtml(PATTERNS, g.pattern)}</select>
+      <input data-gf="detailNotes" class="g-notes" type="text" value="${esc(g.detailNotes)}" placeholder="detail notes">
+    </div>
+    <div class="g-details">
+      ${chips}
+      <select class="d-add"><option value="">+ detail</option>${remaining.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join("")}</select>
+    </div>
   </div>`;
 }
 
-function accRowHtml(lookId, aIdx, a){
+function accRowHtml(a, aIdx){
   return `
-  <div class="acc-row" data-look="${lookId}" data-aidx="${aIdx}">
-    <select class="a-type">${optionsHtml(ACCESSORY_TYPES, a.type||"")}</select>
-    <input class="a-detail" type="text" value="${(a.detail||"").replace(/"/g,'&quot;')}" placeholder="detail">
-    <button class="icon-btn a-remove" title="remove">✕</button>
+  <div class="acc-row" data-aidx="${aIdx}">
+    <select data-af="type">${optionsHtml(ACCESSORY_TYPES, a.type)}</select>
+    <input data-af="colour" type="text" value="${esc(a.colour)}" placeholder="colour">
+    <input data-af="detail" type="text" value="${esc(a.detail)}" placeholder="detail">
+    <button class="icon-btn danger a-remove" title="remove">✕</button>
   </div>`;
 }
 
 function lookCardHtml(look){
-  const garmentsHtml = look.garments.map((g,i)=>garmentRowHtml(look.id,i,g)).join("");
-  const accHtml = look.accessories.map((a,i)=>accRowHtml(look.id,i,a)).join("");
+  const garmentsHtml = look.garments.map(garmentRowHtml).join("");
+  const accHtml = look.accessories.map(accRowHtml).join("");
+  const dc = look.dominantColour || {};
   return `
-  <div class="look-card" data-look-id="${look.id}">
+  <div class="look-card" data-look-id="${esc(look.id)}">
     <div class="look-head">
-      <span class="tag">Look ${look.lookNumber}</span>
+      <span class="tag">Look ${esc(look.lookNumber)}</span>
       <div class="actions">
-        <button class="icon-btn del-look">delete look</button>
+        <button class="icon-btn danger del-look">delete look</button>
       </div>
     </div>
 
+    <div class="look-meta">
+      <label class="lm lm-formula"><span>Outfit formula</span><input data-lf="outfitFormula" type="text" value="${esc(look.outfitFormula)}" placeholder="e.g. blazer + mini skirt"></label>
+      <label class="lm"><span>Silhouette</span><select data-lf="silhouette">${optionsHtml(LOOK_SILHOUETTES, look.silhouette)}</select></label>
+      <label class="lm"><span>Dominant colour</span><input data-lf="dcName" type="text" value="${esc(dc.name)}" placeholder="shade"></label>
+      <label class="lm"><span>Family</span><select data-lf="dcFamily">${optionsHtml(COLOUR_FAMILIES, dc.family)}</select></label>
+      <label class="lm"><span>Hex</span><input data-lf="dcHex" type="color" value="${esc(dc.hex || "#DFD3CD")}"></label>
+      <label class="lm"><span>Dominant material</span><select data-lf="dominantMaterial">${groupedMaterialOptions(look.dominantMaterial)}</select></label>
+    </div>
+
     <div class="mini-head">
-      <span>Piece</span><span>Type</span><span>Fit</span><span>Fabric treat.</span><span>Colour</span><span>Details</span><span></span>
+      <span>Piece</span><span>Type</span><span>Length</span><span>Fit</span><span>Material</span><span>Finish</span><span></span>
     </div>
     <div class="garments-list">${garmentsHtml}</div>
     <button class="add-small add-garment">+ add garment</button>
@@ -697,18 +1184,18 @@ function lookCardHtml(look){
     <div class="sub-block">
       <div class="sub-block-title">Footwear</div>
       <div class="foot-row">
-        <select class="f-type">${optionsHtml(FOOTWEAR_TYPES, look.footwear.type||"")}</select>
-        <input class="f-colour" type="text" value="${(look.footwear.colour||"").replace(/"/g,'&quot;')}" placeholder="colour">
+        <select data-lf="footType">${optionsHtml(FOOTWEAR_TYPES, look.footwear.type)}</select>
+        <input data-lf="footColour" type="text" value="${esc(look.footwear.colour)}" placeholder="colour">
       </div>
     </div>
 
     <div class="coord-row">
-      <input type="checkbox" class="coord-check" ${look.coordSet?"checked":""}>
+      <input type="checkbox" data-lf="coordSet" ${look.coordSet?"checked":""}>
       <label>Jacket / trouser co-ord set</label>
     </div>
 
     <div class="notes-row">
-      <textarea class="notes-field" placeholder="free notes…">${(look.notes||"")}</textarea>
+      <textarea data-lf="notes" placeholder="free notes…">${esc(look.notes)}</textarea>
     </div>
   </div>`;
 }
@@ -726,51 +1213,81 @@ function renderHouses(){
       ? looks.map(lookCardHtml).join("")
       : `<div class="empty">No looks yet for this house.</div>`;
     return `
-    <div class="house-group" data-house-id="${house.id}">
+    <div class="house-group ${house.excluded?"excluded":""}" data-house-id="${esc(house.id)}">
       <div class="house-head">
-        <h3>${house.name}</h3>
-        <div style="display:flex;align-items:center;gap:14px;">
+        <h3>${esc(house.name)}${house.excluded?'<span class="excl-badge">excluded from report</span>':""}</h3>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
           <span class="count">${looks.length} look${looks.length===1?"":"s"}</span>
-          <button class="icon-btn del-house">delete house</button>
+          <button class="icon-btn toggle-excl">${house.excluded?"include in report":"exclude from report"}</button>
+          <button class="icon-btn danger del-house">delete house</button>
           <span class="toggle">${isOpen?"– collapse":"+ expand"}</span>
         </div>
       </div>
-      <div class="house-body ${isOpen?"open":""}">${cards}</div>
+      <div class="house-body ${isOpen?"open":""}">${isOpen ? cards : ""}</div>
     </div>`;
   }).join("");
 }
 
-// ---------- trend aggregation ----------
+// ---------- aggregation ----------
+function reportHouses(){ return state.houses.filter(h=>!h.excluded); }
+function reportLooks(houseId){
+  const ids = new Set(reportHouses().map(h=>h.id));
+  return state.looks.filter(l=> ids.has(l.houseId) && (!houseId || l.houseId===houseId));
+}
+function garmentsOf(looks){
+  const out = [];
+  looks.forEach(l=> (l.garments||[]).forEach(g=> out.push(g)));
+  return out;
+}
+
+const TREND_CATEGORIES = ["garment","piece","length","fit","silhouette","formula","material","material family","finish","pattern","detail","colour","accessory","footwear","styling"];
+
 function trendTagsForLook(look){
   const tags = new Set();
+  const add = (cat, val)=>{ if(val) tags.add(`${cat} | ${val}`); };
   (look.garments||[]).forEach(g=>{
-    if(g.piece && g.type) tags.add(`garment | ${g.piece}: ${g.type}`);
-    if(g.fabricTreatment) tags.add(`fabric | ${g.fabricTreatment}`);
-    if(g.fit) tags.add(`fit | ${g.fit}`);
+    add("piece", g.piece);
+    if(g.piece && g.type) add("garment", `${g.piece}: ${g.type}`);
+    if(g.piece && g.length) add("length", `${g.piece}: ${g.length}`);
+    add("fit", g.fit);
+    add("material", g.material);
+    add("material family", materialGroupOf(g.material));
+    add("finish", g.fabricTreatment);
+    if(g.pattern && g.pattern !== "solid") add("pattern", g.pattern);
+    (g.details||[]).forEach(d=> add("detail", d));
+    add("colour", g.colourFamily);
   });
+  add("silhouette", look.silhouette);
+  add("formula", look.outfitFormula);
   (look.accessories||[]).forEach(a=>{
-    if(a.type) tags.add(`accessory | ${a.type}`);
+    add("accessory", a.type);
+    if(a.type === "cummerbund" || a.type === "sash") add("detail", "cummerbund/sash");
   });
-  if(look.footwear && look.footwear.type) tags.add(`footwear | ${look.footwear.type}`);
-  if(look.coordSet) tags.add(`styling | jacket/trouser co-ord`);
-  if(!(look.accessories||[]).some(a=>a.type==="bag")) tags.add(`accessory | no bag`);
+  if(look.footwear && look.footwear.type) add("footwear", look.footwear.type);
+  if(look.coordSet) add("styling", "jacket/trouser co-ord");
+  if(!(look.accessories||[]).some(a=>a.type==="bag")) add("accessory", "no bag");
   return Array.from(tags);
 }
 
+function splitTag(tag){
+  const i = tag.indexOf(" | ");
+  return { category: tag.slice(0,i), value: tag.slice(i+3) };
+}
+
 function computeSeasonReport(){
-  const totalLooks = state.looks.length;
-  const totalHouses = state.houses.length;
-  const byTag = {}; // tag -> {lookCount, houseIds:Set}
-  state.looks.forEach(look=>{
-    const tags = trendTagsForLook(look);
-    tags.forEach(t=>{
+  const looks = reportLooks();
+  const totalLooks = looks.length;
+  const totalHouses = reportHouses().length;
+  const byTag = {};
+  looks.forEach(look=>{
+    trendTagsForLook(look).forEach(t=>{
       if(!byTag[t]) byTag[t] = { lookCount:0, houseIds:new Set() };
       byTag[t].lookCount++;
       byTag[t].houseIds.add(look.houseId);
     });
   });
   return Object.entries(byTag).map(([tag,v])=>({
-    tag,
+    tag, ...splitTag(tag),
     lookCount: v.lookCount,
     lookShare: totalLooks ? v.lookCount/totalLooks : 0,
     houseCount: v.houseIds.size,
@@ -783,12 +1300,10 @@ function computeHouseReport(houseId){
   const total = looks.length;
   const byTag = {};
   looks.forEach(look=>{
-    trendTagsForLook(look).forEach(t=>{
-      byTag[t] = (byTag[t]||0) + 1;
-    });
+    trendTagsForLook(look).forEach(t=>{ byTag[t] = (byTag[t]||0) + 1; });
   });
   return Object.entries(byTag).map(([tag,count])=>({
-    tag, count, share: total ? count/total : 0
+    tag, ...splitTag(tag), count, share: total ? count/total : 0
   })).sort((a,b)=>b.share-a.share);
 }
 
@@ -797,40 +1312,61 @@ function pctBar(pct, hi){
   return `<div class="bar-cell"><div class="bar-track"><div class="bar-fill ${hi?'hi':''}" style="width:${p}%"></div></div><span class="pct">${p}%</span></div>`;
 }
 
+function renderReportFilter(){
+  const el = document.getElementById("reportFilter");
+  if(!state.looks.length){ el.innerHTML = ""; return; }
+  el.innerHTML = ["all"].concat(TREND_CATEGORIES).map(c=>`<button class="cat-pill ${c===reportCategory?"active":""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
+}
+document.getElementById("reportFilter").addEventListener("click", (e)=>{
+  const pill = e.target.closest(".cat-pill");
+  if(!pill) return;
+  reportCategory = pill.dataset.cat;
+  renderReportFilter();
+  renderReport();
+});
+
 function renderReport(){
   const container = document.getElementById("reportContainer");
   if(!state.looks.length){
     container.innerHTML = `<div class="empty">Tag some looks to see the trend report.</div>`;
     return;
   }
+  const inCat = (r)=> reportCategory === "all" || r.category === reportCategory;
   if(activeTab==="season"){
-    const rows = computeSeasonReport();
+    const looks = reportLooks();
+    if(!looks.length){ container.innerHTML = `<div class="empty">Every house is excluded from the report.</div>`; return; }
+    const rows = computeSeasonReport().filter(inCat);
+    const excluded = state.houses.length - reportHouses().length;
     container.innerHTML = `
+    <div class="sub-meta">${looks.length} looks across ${reportHouses().length} houses${excluded?` (${excluded} excluded)`:""}</div>
     <table>
       <thead><tr>
-        <th>Trend</th><th>Share of season looks</th><th>Houses featuring it</th>
+        <th>Category</th><th>Trend</th><th>Share of season looks</th><th>Houses featuring it</th>
       </tr></thead>
       <tbody>
         ${rows.map(r=>`
           <tr>
-            <td>${r.tag}</td>
-            <td>${pctBar(r.lookShare, r.lookShare>=0.5)} <span style="color:var(--muted);font-size:11.5px;">(${r.lookCount}/${state.looks.length} looks)</span></td>
-            <td>${r.houseCount}/${state.houses.length} houses (${Math.round(r.houseShare*100)}%)</td>
+            <td><span class="cat-badge">${esc(r.category)}</span></td>
+            <td>${esc(r.value)}</td>
+            <td>${pctBar(r.lookShare, r.lookShare>=0.5)} <span style="color:var(--muted);font-size:11.5px;">(${r.lookCount}/${looks.length} looks)</span></td>
+            <td>${r.houseCount}/${reportHouses().length} houses (${Math.round(r.houseShare*100)}%)</td>
           </tr>`).join("")}
       </tbody>
     </table>`;
   } else {
-    const filterId = document.getElementById("houseFilterSelect") ? document.getElementById("houseFilterSelect").value : (state.houses[0] ? state.houses[0].id : "");
-    const selectHtml = `<div class="house-select-filter"><select id="houseFilterSelect">${state.houses.map(h=>`<option value="${h.id}" ${h.id===filterId?"selected":""}>${h.name}</option>`).join("")}</select></div>`;
-    const rows = filterId ? computeHouseReport(filterId) : [];
+    const prev = document.getElementById("houseFilterSelect");
+    const filterId = prev && state.houses.some(h=>h.id===prev.value) ? prev.value : (state.houses[0] ? state.houses[0].id : "");
+    const selectHtml = `<div class="house-select-filter"><select id="houseFilterSelect">${state.houses.map(h=>`<option value="${esc(h.id)}" ${h.id===filterId?"selected":""}>${esc(h.name)}${h.excluded?" (excluded)":""}</option>`).join("")}</select></div>`;
+    const rows = filterId ? computeHouseReport(filterId).filter(inCat) : [];
     const total = state.looks.filter(l=>l.houseId===filterId).length;
     container.innerHTML = selectHtml + `
     <table>
-      <thead><tr><th>Trend</th><th>Share within collection</th></tr></thead>
+      <thead><tr><th>Category</th><th>Trend</th><th>Share within collection</th></tr></thead>
       <tbody>
         ${rows.map(r=>`
           <tr>
-            <td>${r.tag}</td>
+            <td><span class="cat-badge">${esc(r.category)}</span></td>
+            <td>${esc(r.value)}</td>
             <td>${pctBar(r.share, r.share>=0.5)} <span style="color:var(--muted);font-size:11.5px;">(${r.count}/${total} looks)</span></td>
           </tr>`).join("")}
       </tbody>
@@ -839,9 +1375,9 @@ function renderReport(){
   }
 }
 
-document.querySelectorAll(".tab").forEach(tab=>{
+document.querySelectorAll("[data-tab]").forEach(tab=>{
   tab.addEventListener("click", ()=>{
-    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    document.querySelectorAll("[data-tab]").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
     activeTab = tab.dataset.tab;
     renderReport();
@@ -849,34 +1385,13 @@ document.querySelectorAll(".tab").forEach(tab=>{
 });
 
 // ---------- colour breakdown ----------
-const COLOUR_PALETTE = [
-  {key:"black",   hex:"#141114", match:["black","noir","jet"]},
-  {key:"white",   hex:"#EFE9E3", match:["white","ivory","ecru","off-white"]},
-  {key:"navy",    hex:"#1B2A4A", match:["navy"]},
-  {key:"blue",    hex:"#3E6FA8", match:["blue","denim","cobalt","indigo"]},
-  {key:"grey",    hex:"#8C8580", match:["grey","gray","charcoal","slate"]},
-  {key:"brown",   hex:"#6B4A34", match:["brown","chocolate","coffee","espresso"]},
-  {key:"tan",     hex:"#C9A876", match:["tan","camel","beige","sand","khaki","nude"]},
-  {key:"olive",   hex:"#6B6B3A", match:["olive","army"]},
-  {key:"green",   hex:"#3F6B4A", match:["green","emerald","forest","sage","mint"]},
-  {key:"red",     hex:"#C6362E", match:["red","crimson","scarlet"]},
-  {key:"burgundy",hex:"#6E2A34", match:["burgundy","maroon","wine","oxblood"]},
-  {key:"pink",    hex:"#D98FA0", match:["pink","rose","blush","fuchsia","magenta"]},
-  {key:"purple",  hex:"#6E4A78", match:["purple","lilac","lavender","violet"]},
-  {key:"yellow",  hex:"#D9B34A", match:["yellow","mustard","lemon"]},
-  {key:"orange",  hex:"#C97A3E", match:["orange","rust","terracotta","copper"]},
-  {key:"silver",  hex:"#B9B4AE", match:["silver","metallic","chrome"]},
-  {key:"gold",    hex:"#B8963E", match:["gold","golden","bronze"]}
-];
-const UNSPECIFIED = {key:"unspecified", hex:"#DFD3CD"};
-
 function normaliseColour(str){
   if(!str) return [UNSPECIFIED.key];
   const tokens = str.toLowerCase().split(/[\s\/,\-&]+|\band\b/).map(t=>t.trim()).filter(Boolean);
   const matched = new Set();
   tokens.forEach(tok=>{
     COLOUR_PALETTE.forEach(p=>{
-      if(p.match.some(m=> tok.includes(m) || m.includes(tok))) matched.add(p.key);
+      if(p.match.some(m=> tok.includes(m) || (tok.length > 2 && m.includes(tok)))) matched.add(p.key);
     });
   });
   return matched.size ? Array.from(matched) : [UNSPECIFIED.key];
@@ -887,21 +1402,64 @@ function hexFor(key){
   return found ? found.hex : UNSPECIFIED.hex;
 }
 
-function computeColourBreakdown(houseId){
-  const looks = houseId ? state.looks.filter(l=>l.houseId===houseId) : state.looks;
+function luminance(hex){
+  const h = validHex(hex) || "#999999";
+  const c = [1,3,5].map(i=> parseInt(h.slice(i,i+2),16)/255).map(v=> v<=0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4));
+  return 0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2];
+}
+
+function colourMode(){ return document.getElementById("colourModeSelect").value; }
+
+// Family share. "looks" mode = one dominant colour per look (the DFB caption method); "garments" = every garment counts once.
+function computeColourBreakdown(houseId, mode){
+  mode = mode || colourMode();
+  const looks = reportLooks(houseId);
   const counts = {};
-  looks.forEach(look=>{
-    (look.garments||[]).forEach(g=>{
-      if(!g.colour) return;
-      const keys = normaliseColour(g.colour);
-      const weight = 1/keys.length;
-      keys.forEach(k=> counts[k] = (counts[k]||0) + weight);
+  if(mode === "looks"){
+    looks.forEach(l=>{
+      const f = (l.dominantColour && l.dominantColour.family) || UNSPECIFIED.key;
+      counts[f] = (counts[f]||0) + 1;
     });
-  });
+  } else {
+    garmentsOf(looks).forEach(g=>{
+      if(!g.colourFamily && !g.colourName) return;
+      const f = g.colourFamily || UNSPECIFIED.key;
+      counts[f] = (counts[f]||0) + 1;
+    });
+  }
   const total = Object.values(counts).reduce((a,b)=>a+b,0);
   return Object.entries(counts)
     .map(([key,value])=>({ key, hex: hexFor(key), value, share: total? value/total : 0 }))
     .sort((a,b)=>b.value-a.value);
+}
+
+// Specific shades ("butter yellow"), with the most common hex seen for each.
+function computeShades(houseId, mode){
+  mode = mode || colourMode();
+  const looks = reportLooks(houseId);
+  const items = mode === "looks"
+    ? looks.map(l=> l.dominantColour || {}).map(d=>({ name: d.name, family: d.family, hex: d.hex }))
+    : garmentsOf(looks).map(g=>({ name: g.colourName, family: g.colourFamily, hex: g.hex }));
+  const byShade = {};
+  items.forEach(it=>{
+    const name = String(it.name||"").toLowerCase().trim();
+    if(!name) return;
+    if(!byShade[name]) byShade[name] = { name, count: 0, families: {}, hexes: {} };
+    const s = byShade[name];
+    s.count++;
+    if(it.family) s.families[it.family] = (s.families[it.family]||0) + 1;
+    if(it.hex) s.hexes[it.hex] = (s.hexes[it.hex]||0) + 1;
+  });
+  const total = items.filter(it=> it.name).length;
+  const top = (o)=> Object.entries(o).sort((a,b)=>b[1]-a[1]).map(e=>e[0])[0] || "";
+  return Object.values(byShade).map(s=>{
+    const family = top(s.families);
+    return { name: s.name, family, hex: top(s.hexes) || hexFor(family), count: s.count, share: total ? s.count/total : 0 };
+  }).sort((a,b)=> b.count-a.count || a.name.localeCompare(b.name));
+}
+
+function neutralShare(data){
+  return data.filter(d=> NEUTRAL_FAMILIES.includes(d.key)).reduce((a,d)=> a + d.share, 0);
 }
 
 function polarPt(cx,cy,r,angleDeg){
@@ -922,20 +1480,15 @@ function donutSvg(data, size, centerLabel){
   const cx = size/2, cy = size/2, rOuter = size/2 - 4, rInner = rOuter*0.72;
   const rLabel = (rOuter + rInner) / 2;
   const centerText = centerLabel ? `
-    <text x="${cx}" y="${cy-4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="${size*0.10}" fill="var(--ink)" font-weight="600">${centerLabel.top}</text>
-    <text x="${cx}" y="${cy+size*0.09}" text-anchor="middle" font-family="Inter, sans-serif" font-size="${size*0.055}" fill="var(--muted)">${centerLabel.bottom}</text>` : "";
-
-  function fontSizeFor(){
-    return size * 0.065;
-  }
+    <text x="${cx}" y="${cy-4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="${size*0.10}" fill="var(--ink)" font-weight="600">${esc(centerLabel.top)}</text>
+    <text x="${cx}" y="${cy+size*0.09}" text-anchor="middle" font-family="Century Gothic, Gill Sans, Trebuchet MS, sans-serif" font-size="${size*0.055}" fill="var(--muted)">${esc(centerLabel.bottom)}</text>` : "";
 
   function labelFor(d, midA){
     if(d.share < 0.04) return "";
     const pt = polarPt(cx,cy,rLabel,midA);
     const pct = Math.round(d.share*100);
-    const fs = fontSizeFor();
-    const dark = ["white","tan","yellow","gold","silver"].includes(d.key) || d.key==="unspecified";
-    return `<text x="${pt.x}" y="${pt.y}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono, monospace" font-size="${fs}" font-weight="400" fill="${dark ? 'var(--ink)' : '#fff'}">${pct}%</text>`;
+    const fs = size * 0.065;
+    return `<text x="${pt.x}" y="${pt.y}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono, monospace" font-size="${fs}" font-weight="400" fill="${luminance(d.hex) > 0.4 ? 'var(--ink)' : '#fff'}">${pct}%</text>`;
   }
 
   if(!data.length){
@@ -966,19 +1519,35 @@ function legendHtml(data){
   return `<div class="legend">${data.map(d=>`
     <div class="legend-row">
       <span class="swatch" style="background:${d.hex}"></span>
-      <span class="legend-name">${d.key}</span>
+      <span class="legend-name">${esc(d.key)}</span>
       <span class="legend-pct">${Math.round(d.share*100)}%</span>
     </div>`).join("")}</div>`;
+}
+
+function shadesTableHtml(shades, limit){
+  if(!shades.length) return "";
+  const rows = limit ? shades.slice(0, limit) : shades;
+  return `<table>
+    <thead><tr><th>Shade</th><th>Family</th><th>Hex</th><th>Share</th></tr></thead>
+    <tbody>${rows.map(s=>`
+      <tr>
+        <td><span class="hex-swatch" style="background:${esc(s.hex)}"></span>${esc(s.name)}</td>
+        <td>${esc(s.family)}</td>
+        <td class="num">${esc(s.hex)}</td>
+        <td>${pctBar(s.share, false)} <span style="color:var(--muted);font-size:11.5px;">(${s.count})</span></td>
+      </tr>`).join("")}</tbody>
+  </table>${limit && shades.length > limit ? `<div class="sub-meta" style="margin-top:6px;">+ ${shades.length-limit} more shades in the Excel export</div>` : ""}`;
 }
 
 let colourTab = "total";
 
 function renderColourSection(){
   const container = document.getElementById("colourContainer");
-  if(!state.looks.length){
+  if(!reportLooks().length){
     container.innerHTML = `<div class="empty">Tag some looks to see the colour breakdown.</div>`;
     return;
   }
+  const unit = colourMode() === "looks" ? "looks" : "garments";
   if(colourTab === "total"){
     const data = computeColourBreakdown(null);
     const centerLabel = data.length ? { top: Math.round(data[0].share*100)+"%", bottom: data[0].key } : null;
@@ -986,22 +1555,27 @@ function renderColourSection(){
     <div class="donut-panel">
       <div>${donutSvg(data, 180, centerLabel)}</div>
       <div>
-        <h4>${state.season || "Season"} — all houses</h4>
-        <div class="donut-meta">${state.looks.length} looks across ${state.houses.length} houses</div>
+        <h4>${esc(state.season || "Season")} — all houses</h4>
+        <div class="donut-meta">${reportLooks().length} looks across ${reportHouses().length} houses · share of ${unit} · ${Math.round(neutralShare(data)*100)}% neutrals</div>
         ${legendHtml(data)}
       </div>
-    </div>`;
+    </div>
+    <div class="sub-title">Shades</div>
+    <div class="sub-meta">Specific shade names behind the families, with the hex most often estimated for each</div>
+    ${shadesTableHtml(computeShades(null), 30)}`;
   } else {
-    container.innerHTML = `<div class="house-grid">${state.houses.map(h=>{
+    container.innerHTML = `<div class="house-grid">${reportHouses().map(h=>{
       const data = computeColourBreakdown(h.id);
       const lookCount = state.looks.filter(l=>l.houseId===h.id).length;
       const centerLabel = data.length ? { top: Math.round(data[0].share*100)+"%", bottom: data[0].key } : null;
+      const shades = computeShades(h.id).slice(0,5);
       return `
       <div class="donut-panel">
         ${donutSvg(data, 140, centerLabel)}
-        <h4>${h.name}</h4>
-        <div class="donut-meta">${lookCount} looks</div>
+        <h4>${esc(h.name)}</h4>
+        <div class="donut-meta">${lookCount} looks · ${Math.round(neutralShare(data)*100)}% neutrals</div>
         ${legendHtml(data)}
+        ${shades.length ? `<div class="donut-meta" style="margin:8px 0 0;">Top shades: ${shades.map(s=>`<span class="hex-swatch" style="background:${esc(s.hex)}"></span>${esc(s.name)}`).join(", ")}</div>` : ""}
       </div>`;
     }).join("")}</div>`;
   }
@@ -1015,20 +1589,143 @@ document.querySelectorAll("[data-ctab]").forEach(tab=>{
     renderColourSection();
   });
 });
+document.getElementById("colourModeSelect").addEventListener("change", renderColourSection);
+
+// ---------- over-index: what does a fabric / detail / colour sit on? ----------
+const OI_DIMENSIONS = {
+  "material":        g=> g.material ? [g.material] : [],
+  "material family": g=> g.material ? [materialGroupOf(g.material)] : [],
+  "detail":          g=> g.details || [],
+  "colour shade":    g=> g.colourName ? [g.colourName.toLowerCase().trim()] : [],
+  "colour family":   g=> g.colourFamily ? [g.colourFamily] : [],
+  "pattern":         g=> g.pattern && g.pattern !== "solid" ? [g.pattern] : [],
+  "finish":          g=> g.fabricTreatment ? [g.fabricTreatment] : []
+};
+const OI_TARGETS = {
+  "garment type": g=> g.piece && g.type ? `${g.piece}: ${g.type}` : (g.piece || ""),
+  "piece":        g=> g.piece || "",
+  "length":       g=> g.piece && g.length ? `${g.piece}: ${g.length}` : ""
+};
+let oiState = { dim: "material", value: "", target: "garment type", scope: "" };
+
+function oiValues(garments, dim){
+  const counts = {};
+  garments.forEach(g=> OI_DIMENSIONS[dim](g).forEach(v=> counts[v] = (counts[v]||0) + 1));
+  return Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+}
+
+// index = (share of this value's garments on target X) / (share of all garments on target X) * 100
+function computeOverIndex(garments, dim, value, target){
+  const tf = OI_TARGETS[target];
+  const base = {};
+  let baseTotal = 0;
+  garments.forEach(g=>{ const t = tf(g); if(t){ base[t] = (base[t]||0) + 1; baseTotal++; } });
+  const subset = garments.filter(g=> OI_DIMENSIONS[dim](g).includes(value));
+  const counts = {};
+  let subTotal = 0;
+  subset.forEach(g=>{ const t = tf(g); if(t){ counts[t] = (counts[t]||0) + 1; subTotal++; } });
+  return {
+    total: subset.length,
+    rows: Object.entries(counts).map(([label,count])=>{
+      const share = subTotal ? count/subTotal : 0;
+      const baseShare = baseTotal ? base[label]/baseTotal : 0;
+      return { label, count, share, baseShare, index: baseShare ? Math.round(share/baseShare*100) : 0 };
+    }).sort((a,b)=> b.count-a.count || b.index-a.index)
+  };
+}
+
+// Strongest pairings across every dimension, for the "biggest over-indexes" table and the export.
+function computeTopOverIndexes(garments, target, minCount){
+  const out = [];
+  ["material","material family","detail","colour shade","pattern"].forEach(dim=>{
+    oiValues(garments, dim).forEach(([value, n])=>{
+      if(n < minCount) return;
+      computeOverIndex(garments, dim, value, target).rows.forEach(r=>{
+        if(r.count >= minCount) out.push({ dim, value, ...r });
+      });
+    });
+  });
+  return out.sort((a,b)=> b.index-a.index || b.count-a.count);
+}
+
+function renderOverIndex(){
+  const container = document.getElementById("overIndexContainer");
+  const scopeLooks = reportLooks(oiState.scope || null);
+  const garments = garmentsOf(scopeLooks);
+  if(!garments.length){
+    container.innerHTML = `<div class="empty">Tag some looks to see what each fabric, detail and colour sits on.</div>`;
+    return;
+  }
+  const values = oiValues(garments, oiState.dim);
+  if(!values.some(([v])=> v === oiState.value)) oiState.value = values.length ? values[0][0] : "";
+  const res = oiState.value ? computeOverIndex(garments, oiState.dim, oiState.value, oiState.target) : { total: 0, rows: [] };
+  const top = computeTopOverIndexes(garments, oiState.target, 3).filter(r=> r.index >= 150).slice(0, 20);
+  container.innerHTML = `
+  <div class="house-select-filter">
+    <label>Scope</label>
+    <select id="oiScope"><option value="">Whole season</option>${reportHouses().map(h=>`<option value="${esc(h.id)}" ${h.id===oiState.scope?"selected":""}>${esc(h.name)}</option>`).join("")}</select>
+    <label>Look at</label>
+    <select id="oiDim">${Object.keys(OI_DIMENSIONS).map(d=>`<option ${d===oiState.dim?"selected":""}>${esc(d)}</option>`).join("")}</select>
+    <select id="oiValue">${values.map(([v,n])=>`<option value="${esc(v)}" ${v===oiState.value?"selected":""}>${esc(v)} (${n})</option>`).join("")}</select>
+    <label>sits on</label>
+    <select id="oiTarget">${Object.keys(OI_TARGETS).map(t=>`<option ${t===oiState.target?"selected":""}>${esc(t)}</option>`).join("")}</select>
+  </div>
+  <div class="sub-meta">${esc(oiState.value)}: ${res.total} garment${res.total===1?"":"s"} in ${oiState.scope ? "this collection" : "the season"}${res.total < 5 ? " · small sample, read the index with care" : ""}</div>
+  <table>
+    <thead><tr><th>Sits on</th><th>Share of ${esc(oiState.value)}</th><th>Season baseline</th><th>Index</th></tr></thead>
+    <tbody>${res.rows.map(r=>`
+      <tr>
+        <td>${esc(r.label)}</td>
+        <td>${pctBar(r.share, r.share>=0.5)} <span style="color:var(--muted);font-size:11.5px;">(${r.count})</span></td>
+        <td class="num">${Math.round(r.baseShare*100)}%</td>
+        <td class="num ${r.index>=150?"hot":""}">${r.index}</td>
+      </tr>`).join("")}</tbody>
+  </table>
+  <div class="sub-title">Biggest over-indexes</div>
+  <div class="sub-meta">Pairings seen on at least 3 garments, with an index of 150 or more (1.5× the baseline)</div>
+  ${top.length ? `<table>
+    <thead><tr><th>Category</th><th>Value</th><th>Sits on</th><th>Garments</th><th>Index</th></tr></thead>
+    <tbody>${top.map(r=>`
+      <tr>
+        <td><span class="cat-badge">${esc(r.dim)}</span></td>
+        <td>${esc(r.value)}</td>
+        <td>${esc(r.label)}</td>
+        <td class="num">${r.count} (${Math.round(r.share*100)}%)</td>
+        <td class="num hot">${r.index}</td>
+      </tr>`).join("")}</tbody>
+  </table>` : `<div class="empty" style="padding:12px 0;">Nothing strong enough yet. Tag more looks.</div>`}`;
+}
+
+document.getElementById("overIndexContainer").addEventListener("change", (e)=>{
+  if(e.target.id === "oiScope") oiState.scope = e.target.value;
+  if(e.target.id === "oiDim"){ oiState.dim = e.target.value; oiState.value = ""; }
+  if(e.target.id === "oiValue") oiState.value = e.target.value;
+  if(e.target.id === "oiTarget") oiState.target = e.target.value;
+  renderOverIndex();
+});
 
 // ---------- event delegation for editable fields ----------
+let analysisTimer = null;
+function scheduleAnalysisRender(){
+  clearTimeout(analysisTimer);
+  analysisTimer = setTimeout(renderAnalysis, 350);
+}
+
+function lookFromEvent(e){
+  const card = e.target.closest(".look-card");
+  return card ? state.looks.find(l=>l.id===card.dataset.lookId) : null;
+}
+
 document.getElementById("housesContainer").addEventListener("click", (e)=>{
-  const houseHead = e.target.closest(".house-head");
-  if(houseHead && !e.target.closest(".del-house")){
-    const group = houseHead.closest(".house-group");
-    const id = group.dataset.houseId;
-    if(openHouses.has(id)) openHouses.delete(id); else openHouses.add(id);
-    renderHouses();
+  if(e.target.closest(".toggle-excl")){
+    const id = e.target.closest(".house-group").dataset.houseId;
+    const house = state.houses.find(h=>h.id===id);
+    house.excluded = !house.excluded;
+    renderAll(); scheduleSave();
     return;
   }
   if(e.target.closest(".del-house")){
-    const group = e.target.closest(".house-group");
-    const id = group.dataset.houseId;
+    const id = e.target.closest(".house-group").dataset.houseId;
     if(confirm("Delete this house and all its tagged looks?")){
       state.houses = state.houses.filter(h=>h.id!==id);
       state.looks = state.looks.filter(l=>l.houseId!==id);
@@ -1036,76 +1733,101 @@ document.getElementById("housesContainer").addEventListener("click", (e)=>{
     }
     return;
   }
+  const houseHead = e.target.closest(".house-head");
+  if(houseHead){
+    const id = houseHead.closest(".house-group").dataset.houseId;
+    if(openHouses.has(id)) openHouses.delete(id); else openHouses.add(id);
+    renderHouses();
+    return;
+  }
+  const look = lookFromEvent(e);
+  if(!look) return;
   if(e.target.closest(".del-look")){
-    const card = e.target.closest(".look-card");
-    const id = card.dataset.lookId;
-    state.looks = state.looks.filter(l=>l.id!==id);
+    state.looks = state.looks.filter(l=>l.id!==look.id);
     renderAll(); scheduleSave();
     return;
   }
-  if(e.target.classList.contains("g-remove")){
-    const row = e.target.closest(".garment-row");
-    const lookId = row.dataset.look, gIdx = +row.dataset.gidx;
-    const look = state.looks.find(l=>l.id===lookId);
-    look.garments.splice(gIdx,1);
+  if(e.target.closest(".g-remove")){
+    look.garments.splice(+e.target.closest(".garment-row").dataset.gidx, 1);
     renderAll(); scheduleSave();
     return;
   }
-  if(e.target.classList.contains("a-remove")){
-    const row = e.target.closest(".acc-row");
-    const lookId = row.dataset.look, aIdx = +row.dataset.aidx;
-    const look = state.looks.find(l=>l.id===lookId);
-    look.accessories.splice(aIdx,1);
+  if(e.target.closest(".d-remove")){
+    const g = look.garments[+e.target.closest(".garment-row").dataset.gidx];
+    g.details.splice(+e.target.closest(".d-remove").dataset.didx, 1);
+    renderAll(); scheduleSave();
+    return;
+  }
+  if(e.target.closest(".a-remove")){
+    look.accessories.splice(+e.target.closest(".acc-row").dataset.aidx, 1);
     renderAll(); scheduleSave();
     return;
   }
   if(e.target.classList.contains("add-garment")){
-    const card = e.target.closest(".look-card");
-    const look = state.looks.find(l=>l.id===card.dataset.lookId);
-    look.garments.push({piece:"top",type:"",fit:"",fabricTreatment:"",colour:"",details:""});
+    look.garments.push(normaliseGarment({ piece: "top" }));
     renderAll(); scheduleSave();
     return;
   }
   if(e.target.classList.contains("add-acc")){
-    const card = e.target.closest(".look-card");
-    const look = state.looks.find(l=>l.id===card.dataset.lookId);
-    look.accessories.push({type:"bag",detail:""});
+    look.accessories.push({ type: "bag", colour: "", detail: "" });
     renderAll(); scheduleSave();
     return;
   }
 });
 
-document.getElementById("housesContainer").addEventListener("input", (e)=>{
-  const gRow = e.target.closest(".garment-row");
-  if(gRow){
-    const look = state.looks.find(l=>l.id===gRow.dataset.look);
+function onFieldEdit(e){
+  const look = lookFromEvent(e);
+  if(!look) return;
+  const t = e.target;
+  const gRow = t.closest(".garment-row");
+  if(gRow && t.classList.contains("d-add")){
+    if(e.type !== "change" || !t.value) return;
     const g = look.garments[+gRow.dataset.gidx];
-    if(e.target.classList.contains("g-piece")) g.piece = e.target.value;
-    if(e.target.classList.contains("g-type")) g.type = e.target.value;
-    if(e.target.classList.contains("g-fit")) g.fit = e.target.value;
-    if(e.target.classList.contains("g-treat")) g.fabricTreatment = e.target.value;
-    if(e.target.classList.contains("g-colour")) g.colour = e.target.value;
-    if(e.target.classList.contains("g-details")) g.details = e.target.value;
-    scheduleSave();
+    if(!g.details.includes(t.value)) g.details.push(t.value);
+    renderHouses(); scheduleAnalysisRender(); scheduleSave();
     return;
   }
-  const aRow = e.target.closest(".acc-row");
-  if(aRow){
-    const look = state.looks.find(l=>l.id===aRow.dataset.look);
-    const a = look.accessories[+aRow.dataset.aidx];
-    if(e.target.classList.contains("a-type")) a.type = e.target.value;
-    if(e.target.classList.contains("a-detail")) a.detail = e.target.value;
-    scheduleSave();
+  if(gRow && t.dataset.gf){
+    const g = look.garments[+gRow.dataset.gidx];
+    const f = t.dataset.gf;
+    g[f] = f === "hex" ? validHex(t.value) : t.value;
+    if(f === "colourName" && !g.colourFamily){
+      g.colourFamily = familyFromName(g.colourName);
+    }
+    // A new piece means a different list of types; re-render so the type dropdown matches.
+    if(f === "piece" && e.type === "change"){
+      if(g.type && !(TYPES_BY_PIECE[g.piece]||[]).includes(g.type)) g.type = "";
+      renderHouses();
+    }
+    if(f === "colourFamily" && e.type === "change" && !g.hex){ g.hex = hexFor(g.colourFamily); renderHouses(); }
+    scheduleAnalysisRender(); scheduleSave();
     return;
   }
-  const card = e.target.closest(".look-card");
-  if(card){
-    const look = state.looks.find(l=>l.id===card.dataset.lookId);
-    if(e.target.classList.contains("f-type")){ look.footwear.type = e.target.value; scheduleSave(); }
-    if(e.target.classList.contains("f-colour")){ look.footwear.colour = e.target.value; scheduleSave(); }
-    if(e.target.classList.contains("coord-check")){ look.coordSet = e.target.checked; scheduleSave(); }
-    if(e.target.classList.contains("notes-field")){ look.notes = e.target.value; scheduleSave(); }
+  const aRow = t.closest(".acc-row");
+  if(aRow && t.dataset.af){
+    look.accessories[+aRow.dataset.aidx][t.dataset.af] = t.value;
+    scheduleAnalysisRender(); scheduleSave();
+    return;
   }
+  const f = t.dataset.lf;
+  if(!f) return;
+  const dc = look.dominantColour;
+  if(f === "outfitFormula") look.outfitFormula = t.value.toLowerCase();
+  else if(f === "silhouette") look.silhouette = t.value;
+  else if(f === "dominantMaterial") look.dominantMaterial = t.value;
+  else if(f === "dcName"){ dc.name = t.value; if(!dc.family) dc.family = familyFromName(t.value); }
+  else if(f === "dcFamily") dc.family = t.value;
+  else if(f === "dcHex") dc.hex = validHex(t.value);
+  else if(f === "footType") look.footwear.type = t.value;
+  else if(f === "footColour") look.footwear.colour = t.value;
+  else if(f === "coordSet") look.coordSet = t.checked;
+  else if(f === "notes") look.notes = t.value;
+  scheduleAnalysisRender(); scheduleSave();
+}
+document.getElementById("housesContainer").addEventListener("input", onFieldEdit);
+document.getElementById("housesContainer").addEventListener("change", (e)=>{
+  // Text inputs already saved on "input"; "change" matters for selects (piece re-render, detail add).
+  if(e.target.tagName === "SELECT" || e.target.type === "checkbox" || e.target.type === "color") onFieldEdit(e);
 });
 
 // ---------- export ----------
@@ -1113,82 +1835,146 @@ function sanitizeSheetName(name){
   return (name || "Sheet").replace(/[:\\\/\?\*\[\]]/g,"").slice(0,31) || "Sheet";
 }
 
+const GARMENT_HEADERS = ["Piece","Type","Length","Fit","Material","Material Family","Finish","Colour","Colour Family","Hex","Pattern","Details","Detail Notes"];
+function garmentCells(g){
+  return [g.piece||"", g.type||"", g.length||"", g.fit||"", g.material||"", materialGroupOf(g.material), g.fabricTreatment||"", g.colourName||"", g.colourFamily||"", g.hex||"", g.pattern||"", (g.details||[]).join(", "), g.detailNotes||""];
+}
+const LOOK_HEADERS = ["Look","Outfit Formula","Silhouette","Dominant Colour","Dominant Colour Family","Dominant Hex","Dominant Material"];
+function lookCells(look){
+  const dc = look.dominantColour || {};
+  return [look.lookNumber, look.outfitFormula||"", look.silhouette||"", dc.name||"", dc.family||"", dc.hex||"", look.dominantMaterial||""];
+}
+
+function countTable(items, keyFn, total){
+  const counts = {};
+  items.forEach(it=> [].concat(keyFn(it)).filter(Boolean).forEach(k=> counts[k] = (counts[k]||0) + 1));
+  return Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([k,n])=>[k, n, total ? Math.round(n/total*100) : 0]);
+}
+
 function buildWorkbook(){
   const wb = XLSX.utils.book_new();
+  const looks = reportLooks();
+  const garments = garmentsOf(looks);
+  const addSheet = (rows, name)=> XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), name);
 
-  // Season overview — full trend report across all houses
-  const seasonRows = [["Trend","Look Share %","Look Count","Total Looks","House Count","Total Houses","House Share %"]];
+  // Season overview: full trend report across included houses
+  const seasonRows = [["Category","Trend","Look Share %","Look Count","Total Looks","House Count","Total Houses","House Share %"]];
   computeSeasonReport().forEach(r=>{
-    seasonRows.push([r.tag, Math.round(r.lookShare*100), r.lookCount, state.looks.length, r.houseCount, state.houses.length, Math.round(r.houseShare*100)]);
+    seasonRows.push([r.category, r.value, Math.round(r.lookShare*100), r.lookCount, looks.length, r.houseCount, reportHouses().length, Math.round(r.houseShare*100)]);
   });
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(seasonRows), "Season Overview");
+  const excluded = state.houses.filter(h=>h.excluded).map(h=>h.name);
+  if(excluded.length){ seasonRows.push([]); seasonRows.push(["Excluded from report", excluded.join(", ")]); }
+  addSheet(seasonRows, "Season Overview");
 
-  // One tab per house — raw tagged garment data
-  const usedNames = new Set(["Season Overview"]);
-  state.houses.forEach(h=>{
-    const rows = [["Look","Piece","Type","Fit","Fabric Treatment","Colour","Details"]];
-    const looks = state.looks.filter(l=>l.houseId===h.id);
-    looks.forEach(look=>{
-      if(!look.garments.length){
-        rows.push([look.lookNumber,"","","","","",""]);
-      }
-      look.garments.forEach(g=>{
-        rows.push([look.lookNumber, g.piece||"", g.type||"", g.fit||"", g.fabricTreatment||"", g.colour||"", g.details||""]);
-      });
+  // Materials: dominant per look (sums to 100% of looks) + every garment, with what each sits on most
+  const matRows = [["Material","Material Family","Looks (dominant)","Look Share %","Garments","Garment Share %","Most worn as"]];
+  const domCounts = {};
+  looks.forEach(l=>{ if(l.dominantMaterial) domCounts[l.dominantMaterial] = (domCounts[l.dominantMaterial]||0) + 1; });
+  countTable(garments, g=>g.material, garments.length).forEach(([m,n,p])=>{
+    const sitsOn = computeOverIndex(garments, "material", m, "garment type").rows.slice(0,3).map(r=>`${r.label} (${r.count})`).join("; ");
+    matRows.push([m, materialGroupOf(m), domCounts[m]||0, looks.length ? Math.round((domCounts[m]||0)/looks.length*100) : 0, n, p, sitsOn]);
+  });
+  matRows.push([]);
+  matRows.push(["Material Family","","Looks (dominant)","Look Share %","Garments","Garment Share %"]);
+  const domFam = {};
+  looks.forEach(l=>{ const f = materialGroupOf(l.dominantMaterial); if(f) domFam[f] = (domFam[f]||0) + 1; });
+  countTable(garments, g=>materialGroupOf(g.material), garments.length).forEach(([f,n,p])=>{
+    matRows.push([f, "", domFam[f]||0, looks.length ? Math.round((domFam[f]||0)/looks.length*100) : 0, n, p]);
+  });
+  addSheet(matRows, "Materials");
+
+  // Silhouettes: look shape, outfit formula, piece and garment type, length
+  const silRows = [["Look silhouette","Looks","Look Share %"]].concat(countTable(looks, l=>l.silhouette, looks.length));
+  silRows.push([]); silRows.push(["Outfit formula","Looks","Look Share %"]);
+  countTable(looks, l=>l.outfitFormula, looks.length).forEach(r=> silRows.push(r));
+  silRows.push([]); silRows.push(["Piece","Looks featuring","Look Share %"]);
+  countTable(looks, l=> Array.from(new Set(l.garments.map(g=>g.piece))), looks.length).forEach(r=> silRows.push(r));
+  silRows.push([]); silRows.push(["Garment type","Looks featuring","Look Share %"]);
+  countTable(looks, l=> Array.from(new Set(l.garments.filter(g=>g.type).map(g=>`${g.piece}: ${g.type}`))), looks.length).forEach(r=> silRows.push(r));
+  silRows.push([]); silRows.push(["Length","Looks featuring","Look Share %"]);
+  countTable(looks, l=> Array.from(new Set(l.garments.filter(g=>g.length).map(g=>`${g.piece}: ${g.length}`))), looks.length).forEach(r=> silRows.push(r));
+  addSheet(silRows, "Silhouettes");
+
+  // Details: share of looks showing each detail (overlaps, doesn't sum to 100)
+  const detRows = [["Detail","Looks featuring","Look Share %","Most seen on"]];
+  countTable(looks, l=> Array.from(new Set(trendTagsForLook(l).map(splitTag).filter(t=>t.category==="detail").map(t=>t.value))), looks.length).forEach(([d,n,p])=>{
+    const sitsOn = computeOverIndex(garments, "detail", d, "garment type").rows.slice(0,3).map(r=>`${r.label} (${r.count})`).join("; ");
+    detRows.push([d, n, p, sitsOn]);
+  });
+  addSheet(detRows, "Details");
+
+  // Over-index: every pairing seen on 2+ garments
+  const oiRows = [["Category","Value","Sits on (garment type)","Garments","Share of value %","Season baseline %","Index"]];
+  computeTopOverIndexes(garments, "garment type", 2).forEach(r=>{
+    oiRows.push([r.dim, r.value, r.label, r.count, Math.round(r.share*100), Math.round(r.baseShare*100), r.index]);
+  });
+  addSheet(oiRows, "Over-index");
+
+  // Colour: shades (both counting methods)
+  const shadeRows = [["Shade","Family","Hex","Looks (dominant)","Look Share %"]];
+  computeShades(null, "looks").forEach(s=> shadeRows.push([s.name, s.family, s.hex, s.count, Math.round(s.share*100)]));
+  shadeRows.push([]); shadeRows.push(["Shade","Family","Hex","Garments","Garment Share %"]);
+  computeShades(null, "garments").forEach(s=> shadeRows.push([s.name, s.family, s.hex, s.count, Math.round(s.share*100)]));
+  addSheet(shadeRows, "Colour Shades");
+
+  // One tab per house: one row per garment
+  const usedNames = new Set(["Season Overview","Materials","Silhouettes","Details","Over-index","Colour Shades","Colour Hex - Season","Colour Hex - By House"]);
+  reportHouses().forEach(h=>{
+    const rows = [LOOK_HEADERS.concat(GARMENT_HEADERS)];
+    state.looks.filter(l=>l.houseId===h.id).forEach(look=>{
+      if(!look.garments.length) rows.push(lookCells(look).concat(GARMENT_HEADERS.map(()=> "")));
+      look.garments.forEach(g=> rows.push(lookCells(look).concat(garmentCells(g))));
     });
     let name = sanitizeSheetName(h.name);
     let suffix = 2;
     while(usedNames.has(name)){ name = sanitizeSheetName(h.name).slice(0,28) + "_" + suffix; suffix++; }
     usedNames.add(name);
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), name);
+    addSheet(rows, name);
   });
 
-  // Colour hex — season
-  const colourSeasonRows = [["Colour","Hex","Share %","Weight"]];
-  computeColourBreakdown(null).forEach(d=>{
-    colourSeasonRows.push([d.key, d.hex, Math.round(d.share*100), d.value.toFixed(2)]);
+  // Colour hex — family level, season and by house (dominant-colour-per-look method)
+  const colourSeasonRows = [["Colour","Hex","Look Share %","Looks","Garment Share %","Garments"]];
+  const byGarment = {};
+  computeColourBreakdown(null, "garments").forEach(d=> byGarment[d.key] = d);
+  computeColourBreakdown(null, "looks").forEach(d=>{
+    const g = byGarment[d.key] || { share: 0, value: 0 };
+    colourSeasonRows.push([d.key, d.hex, Math.round(d.share*100), d.value, Math.round(g.share*100), g.value]);
   });
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(colourSeasonRows), "Colour Hex - Season");
+  addSheet(colourSeasonRows, "Colour Hex - Season");
 
-  // Colour hex — by house
-  const colourHouseRows = [["House","Colour","Hex","Share %","Weight"]];
-  state.houses.forEach(h=>{
-    computeColourBreakdown(h.id).forEach(d=>{
-      colourHouseRows.push([h.name, d.key, d.hex, Math.round(d.share*100), d.value.toFixed(2)]);
-    });
+  const colourHouseRows = [["House","Colour","Hex","Look Share %","Looks"]];
+  reportHouses().forEach(h=>{
+    computeColourBreakdown(h.id, "looks").forEach(d=> colourHouseRows.push([h.name, d.key, d.hex, Math.round(d.share*100), d.value]));
   });
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(colourHouseRows), "Colour Hex - By House");
+  addSheet(colourHouseRows, "Colour Hex - By House");
 
   return wb;
 }
 
-function toColourCsv(){
-  const rows = [["Scope","Colour","Hex","Share %","Weight"]];
-  const total = computeColourBreakdown(null);
-  total.forEach(d=>{
-    rows.push(["TOTAL (season)", d.key, d.hex, Math.round(d.share*100), d.value.toFixed(2)]);
-  });
-  state.houses.forEach(h=>{
-    const data = computeColourBreakdown(h.id);
-    data.forEach(d=>{
-      rows.push([h.name, d.key, d.hex, Math.round(d.share*100), d.value.toFixed(2)]);
-    });
-  });
+function csvOf(rows){
   return rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
 }
 
-function toCsv(){
-  const rows = [["House","Look","Piece","Type","Fit","Fabric Treatment","Colour","Details"]];
-  state.looks.forEach(look=>{
-    const house = state.houses.find(h=>h.id===look.houseId);
-    if(!look.garments.length){
-      rows.push([house?house.name:"", look.lookNumber, "", "", "", "", "", ""]);
-    }
-    look.garments.forEach(g=>{
-      rows.push([house?house.name:"", look.lookNumber, g.piece||"", g.type||"", g.fit||"", g.fabricTreatment||"", g.colour||"", g.details||""]);
-    });
+function toColourCsv(){
+  const rows = [["Scope","Level","Colour","Family","Hex","Share %","Count"]];
+  computeColourBreakdown(null).forEach(d=> rows.push(["TOTAL (season)","family",d.key,d.key,d.hex,Math.round(d.share*100),d.value]));
+  computeShades(null).forEach(s=> rows.push(["TOTAL (season)","shade",s.name,s.family,s.hex,Math.round(s.share*100),s.count]));
+  reportHouses().forEach(h=>{
+    computeColourBreakdown(h.id).forEach(d=> rows.push([h.name,"family",d.key,d.key,d.hex,Math.round(d.share*100),d.value]));
+    computeShades(h.id).forEach(s=> rows.push([h.name,"shade",s.name,s.family,s.hex,Math.round(s.share*100),s.count]));
   });
-  return rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
+  return csvOf(rows);
+}
+
+function toCsv(){
+  const rows = [["House"].concat(LOOK_HEADERS, GARMENT_HEADERS)];
+  reportLooks().forEach(look=>{
+    const house = state.houses.find(h=>h.id===look.houseId);
+    const pre = [house ? house.name : ""].concat(lookCells(look));
+    if(!look.garments.length) rows.push(pre.concat(GARMENT_HEADERS.map(()=> "")));
+    look.garments.forEach(g=> rows.push(pre.concat(garmentCells(g))));
+  });
+  return csvOf(rows);
 }
 
 function downloadFile(content, filename, mime){
@@ -1200,25 +1986,26 @@ function downloadFile(content, filename, mime){
   URL.revokeObjectURL(url);
 }
 
+function filePrefix(){ return (state.season||"season").replace(/\s+/g,"_"); }
+
 document.getElementById("exportExcel").addEventListener("click", ()=>{
-  if(!state.looks.length){ alert("Tag some looks first."); return; }
-  const wb = buildWorkbook();
-  XLSX.writeFile(wb, `${(state.season||"season").replace(/\s+/g,"_")}_full_export.xlsx`);
+  if(!reportLooks().length){ alert("Tag some looks first (or include at least one house in the report)."); return; }
+  XLSX.writeFile(buildWorkbook(), `${filePrefix()}_full_export.xlsx`);
 });
 document.getElementById("exportCsv").addEventListener("click", ()=>{
-  downloadFile(toCsv(), `${(state.season||"season").replace(/\s+/g,"_")}_looks.csv`, "text/csv");
+  downloadFile(toCsv(), `${filePrefix()}_looks.csv`, "text/csv");
 });
 document.getElementById("exportColourCsv").addEventListener("click", ()=>{
-  downloadFile(toColourCsv(), `${(state.season||"season").replace(/\s+/g,"_")}_colours.csv`, "text/csv");
+  downloadFile(toColourCsv(), `${filePrefix()}_colours.csv`, "text/csv");
 });
 document.getElementById("exportJson").addEventListener("click", ()=>{
-  downloadFile(JSON.stringify(state,null,2), `${(state.season||"season").replace(/\s+/g,"_")}_data.json`, "application/json");
+  downloadFile(JSON.stringify(state,null,2), `${filePrefix()}_data.json`, "application/json");
 });
 document.getElementById("resetAll").addEventListener("click", async ()=>{
   if(confirm("This clears all tagged data for this season. Are you sure?")){
     state = { season: state.season, houses: [], looks: [] };
     renderAll();
-    try{ await saveOnce(); setSaveIndicator("saved \u2713", false); }catch(e){ setSaveIndicator("not saved \u2014 storage error", true); }
+    try{ await saveOnce(); setSaveIndicator("saved ✓", false); }catch(e){ setSaveIndicator("not saved — " + e.message, true); }
   }
 });
 
@@ -1235,11 +2022,17 @@ document.getElementById("importInput").addEventListener("change", async (e)=>{
     if(state.looks.length || state.houses.length){
       if(!confirm("This will replace everything currently in the tool with the imported file. Continue?")) return;
     }
-    state = parsed;
+    state = {
+      season: parsed.season || "",
+      houses: parsed.houses.map(h=>({ id: h.id, name: h.name, excluded: !!h.excluded })),
+      looks: parsed.looks.map(l=> normaliseLook(l, l.houseId))
+    };
+    // An explicit import is a deliberate replace, so it may overwrite the cloud copy.
+    stateLoaded = true;
     document.getElementById("seasonInput").value = state.season || "";
     renderAll();
-    try{ await saveOnce(); setSaveIndicator("saved \u2713", false); }
-    catch(err){ setSaveIndicator("imported, but not saved \u2014 storage error, export again as backup", true); }
+    try{ await saveOnce(); setSaveIndicator("saved ✓", false); }
+    catch(err){ setSaveIndicator("imported, but not saved — " + (err.code === "permission-denied" ? "sign in to save" : "storage error, export again as backup"), true); }
   }catch(err){
     console.error(err);
     alert("Couldn't read that file — make sure it's a JSON export from this tool.");
@@ -1248,10 +2041,23 @@ document.getElementById("importInput").addEventListener("change", async (e)=>{
 });
 
 // ---------- render all ----------
-function render(){ renderHouses(); renderReport(); renderColourSection(); }
+function renderAnalysis(){ renderReportFilter(); renderReport(); renderColourSection(); renderOverIndex(); }
+function render(){ renderHouses(); renderAnalysis(); }
 function renderAll(){ render(); }
 
-loadState();
+render();
+if(auth){
+  auth.onAuthStateChanged((user)=>{
+    currentUser = user;
+    renderAuth();
+    syncApiKeyFromCloud();
+    if(!stateLoaded) loadState();
+  });
+} else {
+  renderAuth();
+  syncApiKeyFromCloud();
+  loadState();
+}
 </script>
 </body>
 </html>
